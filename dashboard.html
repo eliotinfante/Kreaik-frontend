@@ -898,6 +898,7 @@ function applyTheme(t){
 function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
 applyTheme(localStorage.getItem(TK)||'dark');
 
+const API_URL = 'https://kreaix-backend-production.up.railway.app';
 // ── KEYBOARD & INIT ──
 document.addEventListener('keydown',e=>{if(e.key==='Escape')cpg();});
 buildGrid();

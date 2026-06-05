@@ -306,7 +306,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;display
         <span class="btn-text">Iniciar sesión</span>
       </button>
 
-      <p class="terms">Al iniciar sesión aceptas nuestros <a href="#">Términos de uso</a> y <a href="#">Política de privacidad</a></p>
+      <p class="terms">Al iniciar sesión aceptas nuestros <a href="terms.html">Términos de uso</a> y <a href="#">Política de privacidad</a></p>
     </div>
 
     <!-- SUCCESS STATE -->
@@ -382,13 +382,17 @@ async function submitLogin(){
     // localStorage.setItem('nexus_token',d.token);
     // localStorage.setItem('nexus_user',JSON.stringify(d.user));
 
-    // DEMO: simular login exitoso
-    await new Promise(r=>setTimeout(r,1400));
-
-    // Si las credenciales no son correctas (demo):
-    if(email==='error@test.com'){throw new Error('Credenciales incorrectas. Verifica tu email y contraseña.')}
-
-    showSuccess();
+    const API_URL = 'https://kreaix-backend-production.up.railway.app';
+    const r = await fetch(API_URL + '/api/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password })
+    });
+    const d = await r.json();
+    if(!r.ok) throw new Error(d.error || 'Credenciales incorrectas');
+    localStorage.setItem('kreaix_token', d.token);
+    localStorage.setItem('kreaix_user', JSON.stringify(d.user));
+    window.location.href = 'dashboard.html';
   }catch(err){
     btn.classList.remove('loading');btn.disabled=false;
     banner.classList.add('show');
@@ -422,7 +426,7 @@ const ref=urlParams.get('ref');
 if(ref)sessionStorage.setItem('nexus_ref',ref);
 
 // ── CHECK EXISTING SESSION ──
-const tok=localStorage.getItem('nexus_token');
+const tok=localStorage.getItem('kreaix_token');
 if(tok)window.location.href='dashboard.html';
 
 // THEME

@@ -508,28 +508,17 @@ async function submitRegister(){
   btn.classList.add('loading');btn.disabled=true;
 
   try{
-    // En producción: llamar a POST /api/auth/register
-    // const r = await fetch('/api/auth/register', {
-    //   method: 'POST',
-    //   headers: {'Content-Type':'application/json'},
-    //   body: JSON.stringify({ name:`${fname} ${lname}`, email, password:pwd, ref })
-    // });
-    // const d = await r.json();
-    // if(!r.ok) throw new Error(d.error || 'Error al crear la cuenta');
-    // localStorage.setItem('nexus_token', d.token);
-    // localStorage.setItem('nexus_user', JSON.stringify(d.user));
-
-    // DEMO: simular registro
-    await new Promise(r=>setTimeout(r,1600));
-
-    // Demo: email duplicado
-    if(email==='existe@test.com'){
-      throw new Error('Este email ya está registrado. ¿Quieres iniciar sesión?');
-    }
-
-    // Clear ref code from session
-    sessionStorage.removeItem('nexus_ref');
-
+    const API_URL = 'https://kreaix-backend-production.up.railway.app';
+    const r = await fetch(API_URL + '/api/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name:`${fname} ${lname}`, email, password:pwd, ref })
+    });
+    const d = await r.json();
+    if(!r.ok) throw new Error(d.error || 'Error al crear la cuenta');
+    localStorage.setItem('kreaix_token', d.token);
+    localStorage.setItem('kreaix_user', JSON.stringify(d.user));
+    sessionStorage.removeItem('kreaix_ref');
     showSuccess(fname, ref);
   }catch(err){
     btn.classList.remove('loading');btn.disabled=false;
@@ -558,7 +547,7 @@ function showSuccess(name, ref){
 }
 
 // Check session
-const tok=localStorage.getItem('nexus_token');
+const tok=localStorage.getItem('kreaix_token');
 if(tok) window.location.href='dashboard.html';
 
 // THEME
