@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear cuenta — Kreaix</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+[data-theme="light"]{
+  --bg:#f4f4fc;--surface:#eeeef8;--card:#ffffff;--bd:rgba(0,0,0,.09);
+  --tx:#12121e;--mu:#8080a8;--mu2:#50507a;
+}
+*{font-style:normal!important;-webkit-font-smoothing:antialiased}
+body{transition:background .3s,color .3s}
+.ttoggle{position:fixed;top:20px;right:20px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .22s;z-index:100}
+.ttoggle:hover{background:rgba(108,99,255,.15);border-color:#6c63ff}
+:root,[data-theme="dark"]{
+  --bg:#0a0a14;--surface:#0f0f1e;--card:#13132a;
+  --bd:rgba(255,255,255,0.07);--bd2:rgba(108,99,255,0.35);
+  --ac:#6c63ff;--ac2:#ff6b9d;--ac3:#00d4aa;
+  --tx:#e8e8f8;--mu:#6060a0;--mu2:#9090c0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;display:flex;min-height:100vh;overflow:hidden}
+
+/* ── LEFT PANEL ── */
+.left{width:48%;min-height:100vh;position:relative;background:var(--surface);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,170,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,170,0.03) 1px,transparent 1px);background-size:48px 48px;animation:gridshift 24s linear infinite}
+@keyframes gridshift{from{background-position:0 0}to{background-position:48px 48px}}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;animation:pulse2 7s ease-in-out infinite}
+.orb1{width:400px;height:400px;background:rgba(0,212,170,0.09);top:-80px;right:-60px;animation-delay:0s}
+.orb2{width:280px;height:280px;background:rgba(108,99,255,0.1);bottom:-40px;left:-20px;animation-delay:3.5s}
+@keyframes pulse2{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+.left-inner{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:36px 44px}
+.left-logo{display:flex;align-items:center;gap:10px;margin-bottom:auto}
+.lm{width:32px;height:32px;background:linear-gradient(135deg,#6c63ff,#ff6b9d);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;font-family:'Inter',sans-serif}
+.lt{font-family:'Inter',sans-serif;font-weight:800;font-size:18px}.lt span{color:#6c63ff}
+.left-content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+
+/* Steps indicator */
+.steps{display:flex;flex-direction:column;gap:0;margin-bottom:40px}
+.step{display:flex;align-items:flex-start;gap:16px;padding:0 0 28px;position:relative}
+.step:last-child{padding-bottom:0}
+.step::before{content:'';position:absolute;left:17px;top:36px;bottom:0;width:1px;background:var(--bd)}
+.step:last-child::before{display:none}
+.step-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;transition:all .3s;z-index:1;position:relative}
+.step-num.done{background:#00d4aa;color:#fff;box-shadow:0 0 16px rgba(0,212,170,.4)}
+.step-num.active{background:#6c63ff;color:#fff;box-shadow:0 0 16px rgba(108,99,255,.4)}
+.step-num.pending{background:rgba(255,255,255,.06);color:var(--mu);border:1px solid var(--bd)}
+.step-info{padding-top:6px}
+.step-title{font-size:14px;font-weight:600;margin-bottom:3px;transition:color .3s}
+.step-title.active{color:var(--tx)}.step-title.pending{color:var(--mu2)}
+.step-sub{font-size:12px;color:var(--mu);line-height:1.5}
+
+/* Benefits */
+.benefits{background:rgba(0,212,170,.05);border:1px solid rgba(0,212,170,.15);border-radius:16px;padding:20px 22px;margin-bottom:24px}
+.ben-title{font-size:13px;font-weight:700;color:#00d4aa;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
+.ben-list{display:flex;flex-direction:column;gap:10px}
+.ben-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mu2)}
+.ben-check{width:18px;height:18px;border-radius:50%;background:rgba(0,212,170,.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:#00d4aa;flex-shrink:0;font-weight:700}
+
+/* Ref badge */
+.ref-badge{display:none;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.2);border-radius:12px;padding:14px 16px;margin-top:16px}
+.ref-badge.show{display:flex;align-items:center;gap:12px}
+.ref-icon{font-size:22px}
+.ref-title{font-size:13px;font-weight:600;color:#ffd166;margin-bottom:2px}
+.ref-sub{font-size:12px;color:var(--mu2)}
+
+.left-footer{font-size:12px;color:var(--mu);margin-top:auto;padding-top:32px}
+
+/* ── RIGHT PANEL ── */
+.right{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 32px;overflow-y:auto}
+.form-card{width:100%;max-width:440px;padding-bottom:40px}
+.form-header{margin-bottom:28px}
+.form-eyebrow{font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.form-title{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.form-sub{font-size:14px;color:var(--mu2)}.form-sub a{color:#6c63ff;text-decoration:none;font-weight:500}.form-sub a:hover{text-decoration:underline}
+
+/* credits banner */
+.welcome-credits{display:flex;align-items:center;gap:12px;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.2);border-radius:12px;padding:13px 16px;margin-bottom:20px}
+.wc-icon{font-size:20px;flex-shrink:0}
+.wc-text{font-size:13px;color:var(--mu2);line-height:1.5}
+.wc-text strong{color:#00d4aa}
+
+/* google btn */
+.google-btn{width:100%;padding:13px;background:rgba(255,255,255,0.05);border:1px solid var(--bd);border-radius:12px;color:var(--tx);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:20px}
+.google-btn:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,.15);transform:translateY(-1px)}
+.google-icon{width:18px;height:18px;flex-shrink:0}
+.divider{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.divider-line{flex:1;height:1px;background:var(--bd)}.divider-text{font-size:12px;color:var(--mu);white-space:nowrap}
+
+/* fields */
+.field{margin-bottom:14px;position:relative}
+.field-label{font-size:12px;font-weight:600;color:var(--mu2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.field-wrap{position:relative}
+.fi{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.5;pointer-events:none;z-index:1}
+.inp{width:100%;padding:13px 14px 13px 42px;background:rgba(255,255,255,0.04);border:1px solid var(--bd);border-radius:11px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:all .2s}
+.inp:focus{border-color:var(--ac);background:rgba(108,99,255,.05);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.inp::placeholder{color:var(--mu)}
+.inp.err{border-color:#ff6b9d;background:rgba(255,107,157,.05)}
+.inp.ok{border-color:#00d4aa}
+.fmsg{font-size:11px;margin-top:5px;min-height:16px;display:block;transition:all .2s}
+.fmsg.err{color:#ff9fd4}.fmsg.ok{color:#00d4aa}
+.pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mu);cursor:pointer;font-size:15px;padding:4px;transition:color .18s;z-index:1}
+.pwd-toggle:hover{color:var(--tx)}
+
+/* password strength */
+.strength-wrap{margin-top:8px}
+.strength-bars{display:flex;gap:4px;margin-bottom:5px}
+.sbar{flex:1;height:3px;border-radius:100px;background:rgba(255,255,255,.08);transition:background .3s}
+.strength-lbl{font-size:11px;color:var(--mu);transition:color .3s}
+
+/* ref field */
+.ref-field-wrap{position:relative}
+.ref-indicator{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700}
+
+/* two columns */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* checkbox */
+.check-field{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;cursor:pointer}
+.check-field input{display:none}
+.check-box{width:18px;height:18px;border-radius:5px;border:1px solid var(--bd);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;margin-top:1px}
+.check-field input:checked+.check-box{background:#6c63ff;border-color:#6c63ff}
+.check-field input:checked+.check-box::after{content:'✓';font-size:10px;font-weight:700;color:#fff}
+.check-lbl{font-size:13px;color:var(--mu2);line-height:1.5}
+.check-lbl a{color:#6c63ff;text-decoration:none}.check-lbl a:hover{text-decoration:underline}
+.check-err{font-size:11px;color:#ff9fd4;margin-bottom:12px;display:none}
+.check-err.show{display:block}
+
+/* submit */
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6c63ff,#7c6bff);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .22s;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(108,99,255,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent);pointer-events:none}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(108,99,255,.45)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn.loading{opacity:.7;cursor:not-allowed;transform:none}
+.submit-btn.loading .btn-text::after{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-left:8px;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err-banner{display:none;background:rgba(255,107,157,.08);border:1px solid rgba(255,107,157,.25);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#ff9fd4;align-items:center;gap:10px}
+.err-banner.show{display:flex}
+
+/* success */
+.success-state{display:none;text-align:center;padding:30px 0}
+.success-state.show{display:block}
+.success-icon{font-size:64px;margin-bottom:20px;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;margin-bottom:10px}
+.success-sub{font-size:14px;color:var(--mu2);line-height:1.7;margin-bottom:28px;max-width:320px;margin-left:auto;margin-right:auto}
+.success-credits{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.25);border-radius:100px;padding:8px 20px;font-size:14px;font-weight:600;color:#00d4aa;margin-bottom:28px}
+.go-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:linear-gradient(135deg,#6c63ff,#ff6b9d);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .22s;box-shadow:0 4px 24px rgba(108,99,255,.3);text-decoration:none}
+.go-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(108,99,255,.45)}
+
+.terms{font-size:11px;color:var(--mu);text-align:center;margin-top:18px;line-height:1.6}
+.terms a{color:var(--mu2);text-decoration:none}.terms a:hover{color:var(--tx)}
+
+@media(max-width:860px){
+  .left{display:none}
+  .right{padding:32px 20px;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<button class="ttoggle" id="ttbtn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+
+
+<!-- LEFT PANEL -->
+<div class="left">
+  <div class="grid-bg"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="left-inner">
+    <div class="left-logo">
+      <div class="lm">N</div>
+      <div class="lt">Krea<span>ix</span></div>
+    </div>
+
+    <div class="left-content">
+      <div class="steps" id="stepsIndicator">
+        <div class="step">
+          <div class="step-num active" id="sn1">1</div>
+          <div class="step-info"><div class="step-title active" id="st1">Crea tu cuenta</div><div class="step-sub">Email, nombre y contraseña segura</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num pending" id="sn2">2</div>
+          <div class="step-info"><div class="step-title pending" id="st2">Recibe tus créditos de bienvenida</div><div class="step-sub">$0.50 USD para probar todos los modelos</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num pending" id="sn3">3</div>
+          <div class="step-info"><div class="step-title pending" id="st3">Empieza a crear</div><div class="step-sub">Accede a +20 modelos de IA al instante</div></div>
+        </div>
+      </div>
+
+      <div class="benefits">
+        <div class="ben-title">✨ Lo que obtienes gratis</div>
+        <div class="ben-list">
+          <div class="ben-item"><div class="ben-check">✓</div>$0.50 en créditos de bienvenida</div>
+          <div class="ben-item"><div class="ben-check">✓</div>Acceso a +20 modelos de IA top</div>
+          <div class="ben-item"><div class="ben-check">✓</div>Sin suscripción mensual obligatoria</div>
+          <div class="ben-item"><div class="ben-check">✓</div>Créditos sin fecha de vencimiento</div>
+          <div class="ben-item"><div class="ben-check">✓</div>30% de comisión por referidos</div>
+        </div>
+      </div>
+
+      <div class="ref-badge" id="refBadge">
+        <div class="ref-icon">🎁</div>
+        <div>
+          <div class="ref-title">Tienes un código de referido</div>
+          <div class="ref-sub" id="refSubText">Alguien te invitó — ambos ganan créditos extra</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">© 2025 Kreaix — Hecho con ♥ en Latinoamérica</div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+  <div class="form-card">
+
+    <!-- FORM STATE -->
+    <div id="formState">
+      <div class="form-header">
+        <div class="form-eyebrow">Es gratis, siempre</div>
+        <h2 class="form-title">Crear cuenta</h2>
+        <p class="form-sub">¿Ya tienes cuenta? <a href="login.html">Iniciar sesión →</a></p>
+      </div>
+
+      <div class="welcome-credits">
+        <div class="wc-icon">🎁</div>
+        <div class="wc-text">Recibes <strong>$0.50 USD en créditos</strong> al registrarte — sin tarjeta de crédito</div>
+      </div>
+
+      <button class="google-btn" onclick="handleGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Registrarse con Google
+      </button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">o completa el formulario</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="err-banner" id="errBanner">
+        <span>⚠️</span><span id="errMsg">Error al crear la cuenta.</span>
+      </div>
+
+      <!-- NAME ROW -->
+      <div class="row2">
+        <div class="field">
+          <label class="field-label" for="fname">Nombre</label>
+          <div class="field-wrap">
+            <span class="fi">👤</span>
+            <input type="text" id="fname" class="inp" placeholder="Juan" oninput="vName('fname','fnameMsg')" autocomplete="given-name">
+          </div>
+          <span class="fmsg" id="fnameMsg"></span>
+        </div>
+        <div class="field">
+          <label class="field-label" for="lname">Apellido</label>
+          <div class="field-wrap">
+            <span class="fi">👤</span>
+            <input type="text" id="lname" class="inp" placeholder="Martínez" oninput="vName('lname','lnameMsg')" autocomplete="family-name">
+          </div>
+          <span class="fmsg" id="lnameMsg"></span>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="field">
+        <label class="field-label" for="email">Correo electrónico</label>
+        <div class="field-wrap">
+          <span class="fi">✉️</span>
+          <input type="email" id="email" class="inp" placeholder="tu@email.com" oninput="vEmail()" onblur="vEmailBlur()" autocomplete="email">
+        </div>
+        <span class="fmsg" id="emailMsg"></span>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="field">
+        <label class="field-label" for="password">Contraseña</label>
+        <div class="field-wrap">
+          <span class="fi">🔒</span>
+          <input type="password" id="password" class="inp" placeholder="Mínimo 8 caracteres" oninput="vPwd()" autocomplete="new-password">
+          <button class="pwd-toggle" type="button" onclick="togglePwd('password',this)" tabindex="-1">👁️</button>
+        </div>
+        <div class="strength-wrap" id="strengthWrap" style="display:none">
+          <div class="strength-bars">
+            <div class="sbar" id="sb1"></div>
+            <div class="sbar" id="sb2"></div>
+            <div class="sbar" id="sb3"></div>
+            <div class="sbar" id="sb4"></div>
+          </div>
+          <span class="strength-lbl" id="strengthLbl">Contraseña débil</span>
+        </div>
+        <span class="fmsg" id="pwdMsg"></span>
+      </div>
+
+      <!-- CONFIRM PASSWORD -->
+      <div class="field">
+        <label class="field-label" for="confirm">Confirmar contraseña</label>
+        <div class="field-wrap">
+          <span class="fi">🔒</span>
+          <input type="password" id="confirm" class="inp" placeholder="Repite tu contraseña" oninput="vConfirm()" autocomplete="new-password">
+          <button class="pwd-toggle" type="button" onclick="togglePwd('confirm',this)" tabindex="-1">👁️</button>
+        </div>
+        <span class="fmsg" id="confirmMsg"></span>
+      </div>
+
+      <!-- REF CODE -->
+      <div class="field" id="refField">
+        <label class="field-label" for="refcode">Código de referido <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(96,96,160,.6)">(opcional)</span></label>
+        <div class="field-wrap ref-field-wrap">
+          <span class="fi">🎁</span>
+          <input type="text" id="refcode" class="inp" placeholder="Ej: AB3C9F" oninput="vRef()" autocomplete="off" style="text-transform:uppercase;letter-spacing:1px">
+          <span class="ref-indicator" id="refInd"></span>
+        </div>
+        <span class="fmsg" id="refMsg"></span>
+      </div>
+
+      <!-- TERMS -->
+      <label class="check-field">
+        <input type="checkbox" id="terms">
+        <div class="check-box"></div>
+        <span class="check-lbl">Acepto los <a href="#" onclick="return false">Términos de uso</a> y la <a href="#" onclick="return false">Política de privacidad</a> de Kreaix</span>
+      </label>
+      <div class="check-err" id="termsErr">Debes aceptar los términos para continuar</div>
+
+      <label class="check-field">
+        <input type="checkbox" id="marketing" checked>
+        <div class="check-box"></div>
+        <span class="check-lbl">Quiero recibir novedades sobre nuevos modelos y actualizaciones de Kreaix</span>
+      </label>
+
+      <button class="submit-btn" id="submitBtn" onclick="submitRegister()">
+        <span class="btn-text">Crear cuenta gratis →</span>
+      </button>
+
+      <p class="terms" style="margin-top:16px">Tus datos están protegidos con encriptación de 256 bits 🔐</p>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">🚀</div>
+      <div class="success-title">¡Cuenta creada!</div>
+      <div class="success-sub" id="successSub">Bienvenido a Kreaix. Tus créditos de bienvenida ya están disponibles.</div>
+      <div class="success-credits">🎁 $0.50 USD en créditos disponibles</div>
+      <br>
+      <a href="dashboard.html" class="go-btn">Ir al dashboard →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── REF CODE DETECTION ──
+const urlParams = new URLSearchParams(window.location.search);
+const refFromUrl = urlParams.get('ref') || sessionStorage.getItem('nexus_ref') || '';
+if(refFromUrl){
+  document.getElementById('refcode').value = refFromUrl.toUpperCase();
+  document.getElementById('refBadge').classList.add('show');
+  document.getElementById('refInd').textContent = '✓';
+  document.getElementById('refInd').style.color = '#00d4aa';
+  vRef();
+}
+
+// ── VALIDATION ──
+function vName(id, msgId){
+  const el=document.getElementById(id), msg=document.getElementById(msgId), v=el.value.trim();
+  if(!v){el.className='inp';msg.textContent='';msg.className='fmsg';return false}
+  const ok=v.length>=2;
+  el.className='inp '+(ok?'ok':'');
+  msg.textContent=ok?'✓ Válido':'Mínimo 2 caracteres';
+  msg.className='fmsg '+(ok?'ok':'');
+  return ok;
+}
+
+function vEmail(){
+  const el=document.getElementById('email'), msg=document.getElementById('emailMsg'), v=el.value;
+  if(!v){el.className='inp';msg.textContent='';msg.className='fmsg';return false}
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  el.className='inp '+(ok?'ok':'');
+  msg.textContent=ok?'✓ Email válido':'Ingresa un email válido';
+  msg.className='fmsg '+(ok?'ok':'');
+  return ok;
+}
+function vEmailBlur(){
+  const el=document.getElementById('email');
+  if(el.value&&!vEmail()){el.className='inp err';document.getElementById('emailMsg').className='fmsg err';}
+}
+
+function vPwd(){
+  const el=document.getElementById('password'), v=el.value;
+  const msg=document.getElementById('pwdMsg');
+  const sw=document.getElementById('strengthWrap');
+  if(!v){el.className='inp';msg.textContent='';msg.className='fmsg';sw.style.display='none';return false}
+  sw.style.display='block';
+  const str=getPwdStrength(v);
+  updateStrengthUI(str);
+  const ok=v.length>=8;
+  el.className='inp '+(ok?str>=2?'ok':'':'');
+  msg.textContent=ok?'':'Mínimo 8 caracteres';
+  msg.className='fmsg '+(ok?'':'');
+  if(document.getElementById('confirm').value) vConfirm();
+  return ok&&str>=2;
+}
+
+function getPwdStrength(v){
+  let s=0;
+  if(v.length>=8)s++;
+  if(v.length>=12)s++;
+  if(/[A-Z]/.test(v)&&/[a-z]/.test(v))s++;
+  if(/[0-9]/.test(v))s++;
+  if(/[^A-Za-z0-9]/.test(v))s++;
+  return Math.min(4,s);
+}
+
+const strColors=['#ff6b9d','#ffd166','#6c63ff','#00d4aa'];
+const strLabels=['Muy débil','Débil','Media','Fuerte','Muy fuerte'];
+function updateStrengthUI(s){
+  for(let i=1;i<=4;i++){
+    const bar=document.getElementById('sb'+i);
+    bar.style.background=i<=s?strColors[s-1]:'rgba(255,255,255,.08)';
+  }
+  const lbl=document.getElementById('strengthLbl');
+  lbl.textContent=strLabels[s]||'';
+  lbl.style.color=strColors[s-1]||'var(--mu)';
+}
+
+function vConfirm(){
+  const pwd=document.getElementById('password').value;
+  const el=document.getElementById('confirm'), v=el.value;
+  const msg=document.getElementById('confirmMsg');
+  if(!v){el.className='inp';msg.textContent='';msg.className='fmsg';return false}
+  const ok=v===pwd&&v.length>0;
+  el.className='inp '+(ok?'ok':'err');
+  msg.textContent=ok?'✓ Las contraseñas coinciden':'Las contraseñas no coinciden';
+  msg.className='fmsg '+(ok?'ok':'err');
+  return ok;
+}
+
+function vRef(){
+  const el=document.getElementById('refcode'), v=el.value.toUpperCase().trim();
+  el.value=v;
+  const msg=document.getElementById('refMsg'), ind=document.getElementById('refInd');
+  if(!v){el.className='inp';msg.textContent='';msg.className='fmsg';ind.textContent='';return}
+  // Simple format validation (6 alphanumeric chars)
+  const ok=/^[A-Z0-9]{4,10}$/.test(v);
+  el.className='inp '+(ok?'ok':'err');
+  ind.textContent=ok?'✓':'✗';
+  ind.style.color=ok?'#00d4aa':'#ff6b9d';
+  msg.textContent=ok?'✓ Código válido':'Formato inválido (4-10 caracteres)';
+  msg.className='fmsg '+(ok?'ok':'err');
+}
+
+function togglePwd(id,btn){
+  const el=document.getElementById(id);
+  const isText=el.type==='text';
+  el.type=isText?'password':'text';
+  btn.textContent=isText?'👁️':'🙈';
+}
+
+// ── STEP ANIMATION ──
+function setStep(n){
+  for(let i=1;i<=3;i++){
+    const sn=document.getElementById('sn'+i), st=document.getElementById('st'+i);
+    if(i<n){sn.className='step-num done';sn.textContent='✓';st.className='step-title active'}
+    else if(i===n){sn.className='step-num active';sn.textContent=i;st.className='step-title active'}
+    else{sn.className='step-num pending';sn.textContent=i;st.className='step-title pending'}
+  }
+}
+
+// update steps as user fills form
+document.getElementById('fname').addEventListener('input',()=>{if(document.getElementById('fname').value.length>1)setStep(2)});
+document.getElementById('password').addEventListener('input',()=>{if(document.getElementById('password').value.length>5)setStep(3)});
+
+// ── SUBMIT ──
+async function submitRegister(){
+  const fname=document.getElementById('fname').value.trim();
+  const lname=document.getElementById('lname').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const pwd=document.getElementById('password').value;
+  const confirm=document.getElementById('confirm').value;
+  const ref=document.getElementById('refcode').value.trim();
+  const termsOk=document.getElementById('terms').checked;
+  const banner=document.getElementById('errBanner');
+  banner.classList.remove('show');
+
+  // Validate all
+  let valid=true;
+  if(!vName('fname','fnameMsg')){document.getElementById('fname').className='inp err';valid=false}
+  if(!vEmail()){document.getElementById('email').className='inp err';valid=false}
+  if(!vPwd()||pwd.length<8){document.getElementById('password').className='inp err';valid=false}
+  if(!vConfirm()){document.getElementById('confirm').className='inp err';valid=false}
+  if(!termsOk){
+    document.getElementById('termsErr').classList.add('show');
+    valid=false;
+  }else{document.getElementById('termsErr').classList.remove('show')}
+  if(!valid)return;
+
+  const btn=document.getElementById('submitBtn');
+  btn.classList.add('loading');btn.disabled=true;
+
+  try{
+    // En producción: llamar a POST /api/auth/register
+    // const r = await fetch('/api/auth/register', {
+    //   method: 'POST',
+    //   headers: {'Content-Type':'application/json'},
+    //   body: JSON.stringify({ name:`${fname} ${lname}`, email, password:pwd, ref })
+    // });
+    // const d = await r.json();
+    // if(!r.ok) throw new Error(d.error || 'Error al crear la cuenta');
+    // localStorage.setItem('nexus_token', d.token);
+    // localStorage.setItem('nexus_user', JSON.stringify(d.user));
+
+    // DEMO: simular registro
+    await new Promise(r=>setTimeout(r,1600));
+
+    // Demo: email duplicado
+    if(email==='existe@test.com'){
+      throw new Error('Este email ya está registrado. ¿Quieres iniciar sesión?');
+    }
+
+    // Clear ref code from session
+    sessionStorage.removeItem('nexus_ref');
+
+    showSuccess(fname, ref);
+  }catch(err){
+    btn.classList.remove('loading');btn.disabled=false;
+    banner.classList.add('show');
+    document.getElementById('errMsg').textContent=err.message||'Error al crear la cuenta.';
+  }
+}
+
+function handleGoogle(){
+  const btn=document.querySelector('.google-btn');
+  btn.style.opacity='.6';btn.style.pointerEvents='none';
+  btn.innerHTML='<span style="font-size:13px">Conectando con Google...</span>';
+  const ref=document.getElementById('refcode').value||sessionStorage.getItem('nexus_ref')||'';
+  // En producción: window.location.href = `/api/auth/google${ref?`?ref=${ref}`:''}`;
+  setTimeout(()=>showSuccess('Usuario', ref), 1600);
+}
+
+function showSuccess(name, ref){
+  document.getElementById('formState').style.display='none';
+  const s=document.getElementById('successState');
+  const sub=document.getElementById('successSub');
+  sub.textContent=ref
+    ? `¡Bienvenido, ${name||''}! Registraste con código de referido. Tus créditos de bienvenida ya están disponibles.`
+    : `¡Bienvenido, ${name||''}! Tus créditos de bienvenida ya están disponibles en tu cuenta.`;
+  s.classList.add('show');
+}
+
+// Check session
+const tok=localStorage.getItem('nexus_token');
+if(tok) window.location.href='dashboard.html';
+
+// THEME
+(function(){
+  const t=localStorage.getItem('kreaix_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  const b=document.getElementById('ttbtn');
+  if(b)b.textContent=t==='dark'?'🌙':'☀️';
+})();
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('kreaix_theme',next);
+  const b=document.getElementById('ttbtn');
+  if(b)b.textContent=next==='dark'?'🌙':'☀️';
+}
+</script>
+</body>
+</html>

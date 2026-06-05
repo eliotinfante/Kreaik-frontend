@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kreaix — Panel de Administración</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#6c63ff;--ac2:#ff6b9d;--ac3:#00d4aa;--gold:#ffd166;}
+[data-theme="dark"]{--bg:#0a0a14;--sb:#0d0d1a;--sf:#111120;--card:#15152a;--bd:rgba(255,255,255,.07);--tx:#e8e8f8;--tx2:#c0c0e0;--mu:#6060a0;--mu2:#9090c0;--ibg:rgba(255,255,255,.04);}
+[data-theme="light"]{--bg:#f0f0fa;--sb:#ffffff;--sf:#e8e8f8;--card:#ffffff;--bd:rgba(0,0,0,.08);--tx:#12121e;--tx2:#30304a;--mu:#8080a8;--mu2:#50507a;--ibg:rgba(0,0,0,.03);}
+*{margin:0;padding:0;box-sizing:border-box;font-style:normal!important;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;display:flex;min-height:100vh;overflow:hidden;transition:background .3s,color .3s}
+
+/* ── SIDEBAR ── */
+.sb{width:220px;background:var(--sb);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:100;overflow-y:auto}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
+.lm{width:28px;height:28px;background:linear-gradient(135deg,#6c63ff,#ff6b9d);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff}
+.lt{font-size:16px;font-weight:800}.lt span{color:#6c63ff}
+.admin-badge{margin-left:auto;background:rgba(255,107,157,.15);color:#ff6b9d;font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:.5px}
+.sb-nav{flex:1;padding:8px 0}
+.ns{padding:10px 14px 4px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mu);margin-top:4px}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 14px;color:var(--mu2);font-size:13px;font-weight:500;cursor:pointer;transition:all .17s;border-left:2px solid transparent}
+.ni:hover{color:var(--tx);background:rgba(108,99,255,.06)}
+.ni.active{color:var(--tx);background:rgba(108,99,255,.1);border-left-color:#6c63ff}
+.ni-ic{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.ni-badge{margin-left:auto;background:#ff6b9d;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px}
+.sb-btm{padding:12px;border-top:1px solid var(--bd)}
+.admin-info{display:flex;align-items:center;gap:9px;padding:8px;border-radius:9px;cursor:pointer;transition:background .18s}
+.admin-info:hover{background:var(--ibg)}
+.admin-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#ff6b9d,#ffd166);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.admin-name{font-size:12px;font-weight:600}.admin-role{font-size:10px;color:var(--mu)}
+
+/* ── MAIN ── */
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{height:52px;background:rgba(10,10,20,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
+[data-theme="light"] .topbar{background:rgba(240,240,250,.95)}
+.tb-title{font-size:15px;font-weight:700;flex:1}
+.tb-badge{background:rgba(255,107,157,.12);color:#ff6b9d;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.5px;margin-left:8px}
+.tb-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.ttoggle{width:32px;height:32px;border-radius:50%;background:var(--ibg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .22s}
+.ttoggle:hover{background:rgba(108,99,255,.15);border-color:#6c63ff}
+.tb-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s}
+.tb-ghost{background:none;border:1px solid var(--bd);color:var(--mu2)}.tb-ghost:hover{border-color:#6c63ff;color:var(--tx)}
+.tb-solid{background:#6c63ff;border:none;color:#fff}.tb-solid:hover{background:#7d76ff}
+
+/* ── SECTIONS ── */
+.section{display:none;flex:1;overflow-y:auto;padding:24px}
+.section.active{display:block}
+.sec-header{margin-bottom:24px}
+.sec-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.sec-sub{font-size:13px;color:var(--mu2)}
+
+/* ── STAT CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:transform .2s}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--sc,rgba(108,99,255,.04)),transparent);pointer-events:none}
+.sc-label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:600}
+.sc-value{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px}
+.sc-change{font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
+.sc-change.up{color:#00a887}.sc-change.down{color:#c0405a}.sc-change.neutral{color:var(--mu)}
+.sc-icon{position:absolute;top:14px;right:16px;font-size:28px;opacity:.15}
+
+/* ── TABLES ── */
+.table-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:20px}
+.tc-header{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.tc-title{font-size:14px;font-weight:700}
+.tc-actions{display:flex;gap:8px;align-items:center}
+.tc-search{display:flex;align-items:center;gap:8px;background:var(--ibg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;width:200px}
+.tc-search input{background:none;border:none;outline:none;color:var(--tx);font-size:12px;font-family:'Inter',sans-serif;width:100%}
+.tc-search input::placeholder{color:var(--mu)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--ibg)}
+th{padding:10px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap}
+td{padding:13px 16px;font-size:13px;border-bottom:1px solid var(--bd);transition:background .15s}
+tr:last-child td{border:none}
+tbody tr:hover td{background:rgba(108,99,255,.04)}
+.td-main{font-weight:500}
+.td-sub{font-size:11px;color:var(--mu);margin-top:2px}
+.td-mono{font-family:'Courier New',monospace;font-size:11px;color:var(--mu2)}
+
+/* ── STATUS BADGES ── */
+.status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.3px}
+.status-dot{width:5px;height:5px;border-radius:50%}
+.s-active{background:rgba(0,212,170,.12);color:#00a887}.s-active .status-dot{background:#00a887}
+.s-pending{background:rgba(255,209,102,.12);color:#b8860b}.s-pending .status-dot{background:#ffd166}
+.s-blocked{background:rgba(255,107,157,.12);color:#c0405a}.s-blocked .status-dot{background:#ff6b9d}
+.s-completed{background:rgba(108,99,255,.12);color:#6c63ff}.s-completed .status-dot{background:#6c63ff}
+
+/* ── ACTION BUTTONS ── */
+.act{padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s;border:none}
+.act-primary{background:#6c63ff;color:#fff}.act-primary:hover{background:#7d76ff}
+.act-danger{background:rgba(255,107,157,.1);color:#c0405a;border:1px solid rgba(255,107,157,.2)}.act-danger:hover{background:rgba(255,107,157,.2)}
+.act-ghost{background:var(--ibg);color:var(--mu2);border:1px solid var(--bd)}.act-ghost:hover{border-color:#6c63ff;color:var(--tx)}
+
+/* ── CHARTS AREA ── */
+.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px}
+.chart-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:20px}
+.chart-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.chart-sub{font-size:11px;color:var(--mu);margin-bottom:20px}
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:12px}
+.bar-label{font-size:11px;color:var(--mu2);width:80px;flex-shrink:0;font-weight:500;text-align:right}
+.bar-wrap{flex:1;height:8px;background:var(--ibg);border-radius:100px;overflow:hidden}
+.bar-fill{height:100%;border-radius:100px;transition:width 1s ease}
+.bar-value{font-size:11px;font-weight:700;width:48px;text-align:right;flex-shrink:0}
+
+/* DONUT placeholder */
+.donut-wrap{display:flex;flex-direction:column;gap:12px;justify-content:center;height:100%}
+.donut-item{display:flex;align-items:center;gap:10px}
+.donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.donut-label{font-size:12px;color:var(--mu2);flex:1}
+.donut-pct{font-size:13px;font-weight:700}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid var(--bd);border-radius:18px;width:480px;max-width:95vw;max-height:85vh;overflow-y:auto;transform:scale(.96);transition:transform .25s;padding:28px}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:17px;font-weight:700}
+.modal-close{background:none;border:none;color:var(--mu);font-size:20px;cursor:pointer;padding:4px;transition:color .18s}
+.modal-close:hover{color:var(--tx)}
+.modal-field{margin-bottom:14px}
+.modal-label{font-size:11px;font-weight:700;color:var(--mu2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.modal-input{width:100%;background:var(--ibg);border:1px solid var(--bd);border-radius:9px;padding:10px 14px;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.modal-input:focus{border-color:#6c63ff}
+.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.modal-btn{padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s}
+.modal-btn-solid{background:#6c63ff;border:none;color:#fff}.modal-btn-solid:hover{background:#7d76ff}
+.modal-btn-ghost{background:none;border:1px solid var(--bd);color:var(--mu2)}.modal-btn-ghost:hover{border-color:#6c63ff}
+
+/* ── MISC ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.alert{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:10px;margin-bottom:16px;font-size:13px;line-height:1.6}
+.alert-warn{background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.2);color:#b8860b}
+.alert-info{background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);color:#8a83ff}
+.alert-success{background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.2);color:#00a887}
+.empty-state{text-align:center;padding:48px;color:var(--mu)}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-text{font-size:14px;font-weight:500;margin-bottom:4px}
+.empty-sub{font-size:12px;opacity:.7}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--bd)}
+.page-info{font-size:12px;color:var(--mu)}
+.page-btns{display:flex;gap:6px}
+.page-btn{padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:none;color:var(--mu2);font-family:'Inter',sans-serif;transition:all .18s}
+.page-btn:hover{border-color:#6c63ff;color:var(--tx)}
+.page-btn.active{background:#6c63ff;border-color:#6c63ff;color:#fff}
+.tag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.3px}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(108,99,255,.3);border-radius:100px}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="lm">N</div>
+    <div class="lt">Krea<span>ix</span></div>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="ns">Overview</div>
+    <div class="ni active" onclick="showSection('overview',this)"><span class="ni-ic">📊</span>Dashboard</div>
+    <div class="ni" onclick="showSection('realtime',this)"><span class="ni-ic">⚡</span>Tiempo real</div>
+
+    <div class="ns">Usuarios</div>
+    <div class="ni" onclick="showSection('users',this)"><span class="ni-ic">👥</span>Todos los usuarios</div>
+    <div class="ni" onclick="showSection('new-users',this)"><span class="ni-ic">✨</span>Nuevos hoy<span class="ni-badge" id="newUsersBadge">3</span></div>
+    <div class="ni" onclick="showSection('affiliates',this)"><span class="ni-ic">🤝</span>Afiliados</div>
+
+    <div class="ns">Finanzas</div>
+    <div class="ni" onclick="showSection('revenue',this)"><span class="ni-ic">💰</span>Ingresos</div>
+    <div class="ni" onclick="showSection('transactions',this)"><span class="ni-ic">💳</span>Transacciones</div>
+    <div class="ni" onclick="showSection('withdrawals',this)"><span class="ni-ic">🏦</span>Retiros<span class="ni-badge" id="withdrawalsBadge">2</span></div>
+
+    <div class="ns">Plataforma</div>
+    <div class="ni" onclick="showSection('usage',this)"><span class="ni-ic">📈</span>Uso de modelos</div>
+    <div class="ni" onclick="showSection('logs',this)"><span class="ni-ic">📋</span>Logs de generación</div>
+    <div class="ni" onclick="showSection('models',this)"><span class="ni-ic">🤖</span>Gestión de modelos</div>
+
+    <div class="ns">Sistema</div>
+    <div class="ni" onclick="showSection('settings',this)"><span class="ni-ic">⚙️</span>Configuración</div>
+    <div class="ni" onclick="location.href='dashboard.html'"><span class="ni-ic">↗️</span>Ver plataforma</div>
+    <div class="ni" onclick="location.href='login.html'"><span class="ni-ic">🚪</span>Cerrar sesión</div>
+  </nav>
+  <div class="sb-btm">
+    <div class="admin-info">
+      <div class="admin-av">A</div>
+      <div><div class="admin-name">Admin</div><div class="admin-role">Super administrador</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-title" id="topTitle">Dashboard <span class="tb-badge">ADMIN</span></div>
+    <div class="tb-right">
+      <button class="ttoggle" onclick="toggleTheme()" id="ttbtn">🌙</button>
+      <button class="tb-btn tb-ghost" onclick="refreshData()">🔄 Actualizar</button>
+      <button class="tb-btn tb-solid" onclick="openModal('newAnnouncement')">+ Anuncio</button>
+    </div>
+  </div>
+
+  <!-- ══ OVERVIEW ══ -->
+  <div class="section active" id="section-overview">
+
+    <div class="alert alert-info">
+      <span>ℹ️</span>
+      <span>Panel conectado en modo demo. Los datos son de ejemplo — en producción se cargan desde la API del backend.</span>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card" style="--sc:rgba(108,99,255,.06)">
+        <div class="sc-icon">👥</div>
+        <div class="sc-label">Usuarios totales</div>
+        <div class="sc-value" style="color:#6c63ff">1,247</div>
+        <div class="sc-change up">↑ +23 esta semana</div>
+      </div>
+      <div class="stat-card" style="--sc:rgba(0,212,170,.04)">
+        <div class="sc-icon">💰</div>
+        <div class="sc-label">Ingresos del mes</div>
+        <div class="sc-value" style="color:#00a887">$3,842</div>
+        <div class="sc-change up">↑ +18% vs mes anterior</div>
+      </div>
+      <div class="stat-card" style="--sc:rgba(255,209,102,.04)">
+        <div class="sc-icon">⚡</div>
+        <div class="sc-label">Generaciones hoy</div>
+        <div class="sc-value" style="color:#b8860b">8,934</div>
+        <div class="sc-change up">↑ +340 vs ayer</div>
+      </div>
+      <div class="stat-card" style="--sc:rgba(255,107,157,.04)">
+        <div class="sc-icon">📈</div>
+        <div class="sc-label">Margen neto</div>
+        <div class="sc-value" style="color:#c0405a">42%</div>
+        <div class="sc-change neutral">→ estable este mes</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="sc-icon">🔥</div>
+        <div class="sc-label">Usuarios activos hoy</div>
+        <div class="sc-value">284</div>
+        <div class="sc-change up">↑ +12 vs ayer</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-icon">💳</div>
+        <div class="sc-label">Recargas hoy</div>
+        <div class="sc-value">$640</div>
+        <div class="sc-change up">↑ 18 transacciones</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-icon">🤝</div>
+        <div class="sc-label">Comisiones pagadas</div>
+        <div class="sc-value">$384</div>
+        <div class="sc-change neutral">10% del revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-icon">⚠️</div>
+        <div class="sc-label">Errores de API (1h)</div>
+        <div class="sc-value" style="color:#c0405a">3</div>
+        <div class="sc-change down">↓ 99.97% uptime</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Ingresos últimos 7 días</div>
+        <div class="chart-sub">Total por día en USD</div>
+        <div class="bar-chart" id="revenueChart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Uso por categoría</div>
+        <div class="chart-sub">Distribución de generaciones</div>
+        <div class="donut-wrap">
+          <div class="donut-item"><div class="donut-dot" style="background:#6c63ff"></div><div class="donut-label">Texto / Chat</div><div class="donut-pct" style="color:#6c63ff">52%</div></div>
+          <div class="donut-item"><div class="donut-dot" style="background:#00d4aa"></div><div class="donut-label">Imágenes</div><div class="donut-pct" style="color:#00d4aa">28%</div></div>
+          <div class="donut-item"><div class="donut-dot" style="background:#ff6b9d"></div><div class="donut-label">Video</div><div class="donut-pct" style="color:#ff6b9d">12%</div></div>
+          <div class="donut-item"><div class="donut-dot" style="background:#ffd166"></div><div class="donut-label">Música / Voz</div><div class="donut-pct" style="color:#ffd166">8%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP MODELS -->
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Modelos más usados</div><span style="font-size:12px;color:var(--mu)">Últimos 30 días</span></div>
+      <div class="bar-chart" style="padding:20px">
+        <div class="bar-row"><div class="bar-label">Claude Sonnet</div><div class="bar-wrap"><div class="bar-fill" style="width:85%;background:#6c63ff"></div></div><div class="bar-value" style="color:#6c63ff">4.821</div></div>
+        <div class="bar-row"><div class="bar-label">GPT Image 2</div><div class="bar-wrap"><div class="bar-fill" style="width:60%;background:#00d4aa"></div></div><div class="bar-value" style="color:#00d4aa">3.420</div></div>
+        <div class="bar-row"><div class="bar-label">Gemini Flash</div><div class="bar-wrap"><div class="bar-fill" style="width:48%;background:#ffd166"></div></div><div class="bar-value" style="color:#b8860b">2.734</div></div>
+        <div class="bar-row"><div class="bar-label">ElevenLabs</div><div class="bar-wrap"><div class="bar-fill" style="width:30%;background:#ff6b9d"></div></div><div class="bar-value" style="color:#ff6b9d">1.710</div></div>
+        <div class="bar-row"><div class="bar-label">Suno V4.5</div><div class="bar-wrap"><div class="bar-fill" style="width:18%;background:#a89fff"></div></div><div class="bar-value" style="color:#a89fff">1.022</div></div>
+        <div class="bar-row"><div class="bar-label">Flux Kontext</div><div class="bar-wrap"><div class="bar-fill" style="width:12%;background:#7fefda"></div></div><div class="bar-value" style="color:#7fefda">684</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ USUARIOS ══ -->
+  <div class="section" id="section-users">
+    <div class="sec-header">
+      <div class="sec-title">Todos los usuarios</div>
+      <div class="sec-sub">Gestiona cuentas, créditos y permisos</div>
+    </div>
+    <div class="table-card">
+      <div class="tc-header">
+        <div class="tc-title">Usuarios registrados</div>
+        <div class="tc-actions">
+          <div class="tc-search"><span style="color:var(--mu);font-size:13px">🔍</span><input type="text" placeholder="Buscar usuario..." oninput="filterUsers(this.value)"></div>
+          <button class="act act-primary" onclick="openModal('addCredits')">+ Créditos manuales</button>
+          <button class="act act-ghost">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="usersTable">
+          <thead><tr>
+            <th>Usuario</th><th>Email</th><th>Créditos</th><th>Gasto total</th>
+            <th>Generaciones</th><th>Registro</th><th>Estado</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-info" id="usersPageInfo">Mostrando 1-10 de 47 usuarios</div>
+        <div class="page-btns">
+          <button class="page-btn" onclick="changePage(-1)">← Anterior</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn" onclick="changePage(1)">2</button>
+          <button class="page-btn" onclick="changePage(1)">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NUEVOS USUARIOS ══ -->
+  <div class="section" id="section-new-users">
+    <div class="sec-header"><div class="sec-title">Nuevos usuarios hoy</div><div class="sec-sub">Registros de las últimas 24 horas</div></div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">3 nuevos registros</div><span style="font-size:12px;color:var(--mu)">Hoy, 22 Mayo 2025</span></div>
+      <table><thead><tr><th>Nombre</th><th>Email</th><th>Hora</th><th>Referido por</th><th>Email bienvenida</th></tr></thead>
+      <tbody>
+        <tr><td><div class="td-main">María González</div></td><td class="td-mono">maria@gmail.com</td><td style="color:var(--mu)">14:32</td><td><span class="tag" style="background:rgba(0,212,170,.1);color:#00a887">AB3C9F</span></td><td><span class="status s-active"><span class="status-dot"></span>Enviado</span></td></tr>
+        <tr><td><div class="td-main">Carlos Ruiz</div></td><td class="td-mono">carlos@outlook.com</td><td style="color:var(--mu)">11:15</td><td><span style="color:var(--mu)">Sin referido</span></td><td><span class="status s-active"><span class="status-dot"></span>Enviado</span></td></tr>
+        <tr><td><div class="td-main">Andrea López</div></td><td class="td-mono">andrea@empresa.cl</td><td style="color:var(--mu)">09:47</td><td><span class="tag" style="background:rgba(108,99,255,.1);color:#6c63ff">XK7M2P</span></td><td><span class="status s-active"><span class="status-dot"></span>Enviado</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ AFILIADOS ══ -->
+  <div class="section" id="section-affiliates">
+    <div class="sec-header"><div class="sec-title">Programa de afiliados</div><div class="sec-sub">Referidos, comisiones y retiros pendientes</div></div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="sc-label">Afiliados activos</div><div class="sc-value" style="color:#6c63ff">89</div><div class="sc-change up">↑ +7 este mes</div></div>
+      <div class="stat-card"><div class="sc-label">Comisiones pagadas (mes)</div><div class="sc-value" style="color:#00a887">$384</div><div class="sc-change up">↑ 10% del revenue</div></div>
+      <div class="stat-card"><div class="sc-label">Retiros pendientes</div><div class="sc-value" style="color:#c0405a">2</div><div class="sc-change down">Aprobar o rechazar</div></div>
+    </div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Top afiliados del mes</div></div>
+      <table><thead><tr><th>#</th><th>Afiliado</th><th>Referidos</th><th>Ganado este mes</th><th>Saldo disponible</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--gold);font-weight:700">🥇</td><td><div class="td-main">Juan Martínez</div><div class="td-sub">jmartinez@gmail.com</div></td><td>24</td><td style="color:#00a887;font-weight:700">$127.00</td><td>$84.00</td><td><span class="status s-active"><span class="status-dot"></span>Activo</span></td></tr>
+        <tr><td style="color:var(--mu2);font-weight:700">🥈</td><td><div class="td-main">Ana Pérez</div><div class="td-sub">ana@freelancer.com</div></td><td>18</td><td style="color:#00a887;font-weight:700">$96.00</td><td>$96.00</td><td><span class="status s-pending"><span class="status-dot"></span>Retiro pendiente</span></td></tr>
+        <tr><td style="color:#cd7f32;font-weight:700">🥉</td><td><div class="td-main">Roberto Salinas</div><div class="td-sub">rsalinas@empresa.cl</div></td><td>12</td><td style="color:#00a887;font-weight:700">$64.00</td><td>$28.00</td><td><span class="status s-active"><span class="status-dot"></span>Activo</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ INGRESOS ══ -->
+  <div class="section" id="section-revenue">
+    <div class="sec-header"><div class="sec-title">Ingresos</div><div class="sec-sub">Revenue, márgenes y proyecciones</div></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="sc-label">Revenue total (mes)</div><div class="sc-value" style="color:#00a887">$3,842</div><div class="sc-change up">↑ +18%</div></div>
+      <div class="stat-card"><div class="sc-label">Costo de APIs (mes)</div><div class="sc-value" style="color:#c0405a">$2,228</div><div class="sc-change neutral">58% del revenue</div></div>
+      <div class="stat-card"><div class="sc-label">Margen bruto</div><div class="sc-value" style="color:#6c63ff">$1,614</div><div class="sc-change up">42% de margen</div></div>
+      <div class="stat-card"><div class="sc-label">ARPU (ingreso/usuario)</div><div class="sc-value">$3.08</div><div class="sc-change up">↑ +$0.42</div></div>
+    </div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Revenue por proveedor de IA</div></div>
+      <div class="bar-chart" style="padding:20px">
+        <div class="bar-row"><div class="bar-label">Anthropic</div><div class="bar-wrap"><div class="bar-fill" style="width:72%;background:#6c63ff"></div></div><div class="bar-value" style="color:#6c63ff">$1,840</div></div>
+        <div class="bar-row"><div class="bar-label">OpenAI</div><div class="bar-wrap"><div class="bar-fill" style="width:55%;background:#00d4aa"></div></div><div class="bar-value" style="color:#00d4aa">$1,406</div></div>
+        <div class="bar-row"><div class="bar-label">Google</div><div class="bar-wrap"><div class="bar-fill" style="width:22%;background:#ffd166"></div></div><div class="bar-value" style="color:#b8860b">$562</div></div>
+        <div class="bar-row"><div class="bar-label">ElevenLabs</div><div class="bar-wrap"><div class="bar-fill" style="width:12%;background:#ff6b9d"></div></div><div class="bar-value" style="color:#ff6b9d">$306</div></div>
+        <div class="bar-row"><div class="bar-label">DeepSeek</div><div class="bar-wrap"><div class="bar-fill" style="width:7%;background:#a89fff"></div></div><div class="bar-value" style="color:#a89fff">$179</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TRANSACCIONES ══ -->
+  <div class="section" id="section-transactions">
+    <div class="sec-header"><div class="sec-title">Transacciones</div><div class="sec-sub">Historial de todas las recargas</div></div>
+    <div class="table-card">
+      <div class="tc-header">
+        <div class="tc-title">Recargas recientes</div>
+        <div class="tc-actions">
+          <div class="tc-search"><span style="color:var(--mu);font-size:13px">🔍</span><input type="text" placeholder="Buscar..."></div>
+          <button class="act act-ghost">Exportar</button>
+        </div>
+      </div>
+      <table><thead><tr><th>Usuario</th><th>Pack</th><th>Monto</th><th>Créditos</th><th>Stripe ID</th><th>Fecha</th><th>Estado</th></tr></thead>
+      <tbody id="txBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ RETIROS ══ -->
+  <div class="section" id="section-withdrawals">
+    <div class="sec-header"><div class="sec-title">Retiros de afiliados</div><div class="sec-sub">Aprueba o rechaza solicitudes de retiro</div></div>
+    <div class="alert alert-warn"><span>⚠️</span><span>Hay <strong>2 retiros pendientes</strong> de aprobación. Los afiliados esperan su pago.</span></div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Solicitudes pendientes</div></div>
+      <table><thead><tr><th>Afiliado</th><th>Monto</th><th>Método</th><th>Datos de pago</th><th>Solicitado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="td-main">Ana Pérez</div><div class="td-sub">ana@freelancer.com</div></td>
+          <td style="color:#00a887;font-weight:700">$96.00 USD</td>
+          <td>Transferencia</td>
+          <td class="td-mono">Banco BCI · Cta 123456</td>
+          <td style="color:var(--mu)">Hace 2 días</td>
+          <td style="display:flex;gap:6px;align-items:center">
+            <button class="act act-primary" onclick="approveWithdrawal('Ana Pérez','$96.00')">✓ Aprobar</button>
+            <button class="act act-danger" onclick="rejectWithdrawal()">✗ Rechazar</button>
+          </td>
+        </tr>
+        <tr>
+          <td><div class="td-main">Luis Torres</div><div class="td-sub">ltorres@gmail.com</div></td>
+          <td style="color:#00a887;font-weight:700">$32.00 USD</td>
+          <td>PayPal</td>
+          <td class="td-mono">ltorres@paypal.com</td>
+          <td style="color:var(--mu)">Hace 4 días</td>
+          <td style="display:flex;gap:6px;align-items:center">
+            <button class="act act-primary" onclick="approveWithdrawal('Luis Torres','$32.00')">✓ Aprobar</button>
+            <button class="act act-danger" onclick="rejectWithdrawal()">✗ Rechazar</button>
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+    <div class="table-card" style="margin-top:16px">
+      <div class="tc-header"><div class="tc-title">Retiros procesados</div></div>
+      <table><thead><tr><th>Afiliado</th><th>Monto</th><th>Fecha</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td><div class="td-main">Juan Martínez</div></td><td style="color:#00a887;font-weight:700">$127.00</td><td style="color:var(--mu)">15 Mayo 2025</td><td><span class="status s-completed"><span class="status-dot"></span>Pagado</span></td></tr>
+        <tr><td><div class="td-main">Roberto Salinas</div></td><td style="color:#00a887;font-weight:700">$48.00</td><td style="color:var(--mu)">8 Mayo 2025</td><td><span class="status s-completed"><span class="status-dot"></span>Pagado</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ USO DE MODELOS ══ -->
+  <div class="section" id="section-usage">
+    <div class="sec-header"><div class="sec-title">Uso de modelos</div><div class="sec-sub">Estadísticas de generación por modelo y proveedor</div></div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Generaciones por modelo — últimos 30 días</div></div>
+      <table><thead><tr><th>Modelo</th><th>Proveedor</th><th>Tipo</th><th>Generaciones</th><th>Revenue generado</th><th>Costo API</th><th>Margen</th></tr></thead>
+      <tbody id="usageBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ LOGS ══ -->
+  <div class="section" id="section-logs">
+    <div class="sec-header"><div class="sec-title">Logs de generación</div><div class="sec-sub">Últimas 100 generaciones en tiempo real</div></div>
+    <div class="table-card">
+      <div class="tc-header">
+        <div class="tc-title">Log en vivo</div>
+        <div class="tc-actions">
+          <div class="tc-search"><span style="color:var(--mu);font-size:13px">🔍</span><input type="text" placeholder="Filtrar por modelo o usuario..."></div>
+          <select style="background:var(--ibg);border:1px solid var(--bd);border-radius:8px;color:var(--tx);padding:6px 10px;font-size:12px;font-family:'Inter',sans-serif;outline:none">
+            <option>Todos los tipos</option><option>text</option><option>image</option><option>video</option><option>audio</option>
+          </select>
+        </div>
+      </div>
+      <table><thead><tr><th>Hora</th><th>Usuario</th><th>Modelo</th><th>Tipo</th><th>Prompt (preview)</th><th>Costo</th><th>Estado</th></tr></thead>
+      <tbody id="logsBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ GESTIÓN DE MODELOS ══ -->
+  <div class="section" id="section-models">
+    <div class="sec-header"><div class="sec-title">Gestión de modelos</div><div class="sec-sub">Activa, desactiva y configura precios de cada modelo</div></div>
+    <div class="alert alert-info"><span>ℹ️</span><span>Desactivar un modelo lo oculta del dashboard de usuarios inmediatamente. El precio es lo que paga el usuario (tú configuras el margen).</span></div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Modelos disponibles</div><button class="act act-primary" onclick="openModal('addModel')">+ Agregar modelo</button></div>
+      <table><thead><tr><th>Modelo</th><th>Proveedor</th><th>Tipo</th><th>Tu costo</th><th>Precio usuario</th><th>Margen</th><th>Activo</th><th>Acciones</th></tr></thead>
+      <tbody id="modelsBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ TIEMPO REAL ══ -->
+  <div class="section" id="section-realtime">
+    <div class="sec-header"><div class="sec-title">Tiempo real</div><div class="sec-sub">Actividad en vivo de la plataforma</div></div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="sc-label">Usuarios online ahora</div><div class="sc-value" style="color:#00a887" id="onlineCount">47</div><div class="sc-change up">activos últimos 5 min</div></div>
+      <div class="stat-card"><div class="sc-label">Generaciones este minuto</div><div class="sc-value" style="color:#6c63ff" id="genPerMin">12</div><div class="sc-change up">peticiones/min</div></div>
+      <div class="stat-card"><div class="sc-label">Revenue última hora</div><div class="sc-value" style="color:#b8860b" id="revenueHour">$48</div><div class="sc-change up">↑ en tiempo real</div></div>
+    </div>
+    <div class="table-card">
+      <div class="tc-header"><div class="tc-title">Feed de actividad en vivo</div><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#00a887"><span style="width:7px;height:7px;background:#00a887;border-radius:50%;animation:pulse 2s infinite;display:block"></span>En vivo</span></div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:10px" id="liveFeed"></div>
+    </div>
+  </div>
+
+  <!-- ══ CONFIGURACIÓN ══ -->
+  <div class="section" id="section-settings">
+    <div class="sec-header"><div class="sec-title">Configuración del sistema</div><div class="sec-sub">Ajustes globales de la plataforma</div></div>
+    <div class="two-col">
+      <div class="table-card" style="padding:24px">
+        <div class="tc-title" style="margin-bottom:16px">Créditos de bienvenida</div>
+        <div class="modal-field"><label class="modal-label">Cantidad ($USD)</label><input type="number" class="modal-input" value="0.50" step="0.10"></div>
+        <button class="act act-primary" style="width:100%;padding:10px">Guardar</button>
+      </div>
+      <div class="table-card" style="padding:24px">
+        <div class="tc-title" style="margin-bottom:16px">Comisión de afiliados</div>
+        <div class="modal-field"><label class="modal-label">Porcentaje (%)</label><input type="number" class="modal-input" value="30" min="0" max="50"></div>
+        <button class="act act-primary" style="width:100%;padding:10px">Guardar</button>
+      </div>
+      <div class="table-card" style="padding:24px">
+        <div class="tc-title" style="margin-bottom:16px">Retiro mínimo</div>
+        <div class="modal-field"><label class="modal-label">Monto mínimo ($USD)</label><input type="number" class="modal-input" value="20"></div>
+        <button class="act act-primary" style="width:100%;padding:10px">Guardar</button>
+      </div>
+      <div class="table-card" style="padding:24px">
+        <div class="tc-title" style="margin-bottom:16px">Modo mantenimiento</div>
+        <p style="font-size:13px;color:var(--mu2);margin-bottom:14px;line-height:1.6">Activa para mostrar una página de mantenimiento a todos los usuarios.</p>
+        <button class="act act-danger" style="width:100%;padding:10px">Activar mantenimiento</button>
+      </div>
+    </div>
+    <div class="table-card" style="padding:24px;margin-top:0">
+      <div class="tc-title" style="margin-bottom:16px">Estado de APIs de proveedores</div>
+      <div style="display:flex;flex-direction:column;gap:12px" id="apiStatus"></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ══ MODALS ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<style>@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}</style>
+
+<script>
+// ── DEMO DATA ──────────────────────────────────────────────────────
+const USERS = [
+  {id:1,name:'Juan Martínez',email:'jmartinez@gmail.com',credits:12.40,spent:84.00,gens:1247,joined:'15 Abr 2025',status:'active'},
+  {id:2,name:'María González',email:'maria@gmail.com',credits:3.20,spent:22.00,gens:312,joined:'18 Abr 2025',status:'active'},
+  {id:3,name:'Carlos Ruiz',email:'carlos@outlook.com',credits:0.45,spent:45.00,gens:892,joined:'2 Abr 2025',status:'active'},
+  {id:4,name:'Andrea López',email:'andrea@empresa.cl',credits:18.60,spent:120.00,gens:2103,joined:'28 Mar 2025',status:'active'},
+  {id:5,name:'Roberto Salinas',email:'rsalinas@empresa.cl',credits:5.00,spent:35.00,gens:648,joined:'5 May 2025',status:'active'},
+  {id:6,name:'Lucía Fernández',email:'luciaf@gmail.com',credits:0.10,spent:10.00,gens:203,joined:'12 May 2025',status:'active'},
+  {id:7,name:'Diego Torres',email:'dtorres@hotmail.com',credits:22.00,spent:200.00,gens:3402,joined:'1 Mar 2025',status:'active'},
+  {id:8,name:'Valeria Cruz',email:'vcruz@yahoo.com',credits:0.00,spent:5.00,gens:48,joined:'20 May 2025',status:'active'},
+  {id:9,name:'Spam Bot',email:'spam1234@temp.com',credits:0.50,spent:0,gens:0,joined:'21 May 2025',status:'blocked'},
+  {id:10,name:'Pedro Álvarez',email:'pedro@pymes.cl',credits:8.30,spent:62.00,gens:980,joined:'10 Abr 2025',status:'active'},
+];
+
+const TRANSACTIONS = [
+  {user:'Andrea López',pack:'Creator $50',amount:'$50.00',credits:'6.000',sid:'cs_live_a1b2c3',date:'Hace 2h',status:'completed'},
+  {user:'Juan Martínez',pack:'Pro Pack $20',amount:'$20.00',credits:'2.200',sid:'cs_live_d4e5f6',date:'Hace 4h',status:'completed'},
+  {user:'Diego Torres',pack:'Creator $50',amount:'$50.00',credits:'6.000',sid:'cs_live_g7h8i9',date:'Hace 6h',status:'completed'},
+  {user:'María González',pack:'Starter $5',amount:'$5.00',credits:'500',sid:'cs_live_j0k1l2',date:'Ayer',status:'completed'},
+  {user:'Carlos Ruiz',pack:'Pro Pack $20',amount:'$20.00',credits:'2.200',sid:'cs_live_m3n4o5',date:'Ayer',status:'completed'},
+];
+
+const MODELS_LIST = [
+  {name:'Claude Haiku 4.5',provider:'Anthropic',type:'text',cost:'$0.0008',price:'$0.0016',margin:'50%',active:true},
+  {name:'Claude Sonnet 4.6',provider:'Anthropic',type:'text',cost:'$0.0030',price:'$0.0060',margin:'50%',active:true},
+  {name:'GPT-4o Mini',provider:'OpenAI',type:'text',cost:'$0.0001',price:'$0.0002',margin:'50%',active:true},
+  {name:'GPT Image 1 (Mid)',provider:'OpenAI',type:'image',cost:'$0.040',price:'$0.080',margin:'50%',active:true},
+  {name:'Gemini 2.5 Flash',provider:'Google',type:'text',cost:'$0.0001',price:'$0.0002',margin:'50%',active:true},
+  {name:'Imagen 4 Fast',provider:'Google',type:'image',cost:'$0.020',price:'$0.040',margin:'50%',active:true},
+  {name:'ElevenLabs Turbo',provider:'ElevenLabs',type:'audio',cost:'$0.0003',price:'$0.0006',margin:'50%',active:true},
+  {name:'Suno V4.5',provider:'Suno',type:'music',cost:'$0.050',price:'$0.100',margin:'50%',active:true},
+  {name:'Flux Schnell',provider:'Replicate',type:'image',cost:'$0.003',price:'$0.006',margin:'50%',active:false},
+  {name:'Kling V2.1',provider:'Replicate',type:'video',cost:'$0.28',price:'$0.56',margin:'50%',active:false},
+];
+
+const USAGE_DATA = [
+  {model:'Claude Sonnet 4.6',provider:'Anthropic',type:'text',gens:4821,revenue:'$28.93',cost:'$14.46',margin:'50%'},
+  {model:'GPT Image 1',provider:'OpenAI',type:'image',gens:3420,revenue:'$273.60',cost:'$136.80',margin:'50%'},
+  {model:'Gemini 2.5 Flash',provider:'Google',type:'text',gens:2734,revenue:'$0.55',cost:'$0.27',margin:'50%'},
+  {model:'ElevenLabs Turbo',provider:'ElevenLabs',type:'audio',gens:1710,revenue:'$307.80',cost:'$153.90',margin:'50%'},
+  {model:'Suno V4.5',provider:'Suno',type:'music',gens:1022,revenue:'$102.20',cost:'$51.10',margin:'50%'},
+  {model:'Claude Haiku 4.5',provider:'Anthropic',type:'text',gens:892,revenue:'$1.43',cost:'$0.71',margin:'50%'},
+  {model:'Flux Kontext',provider:'Replicate',type:'image',gens:684,revenue:'$54.72',cost:'$27.36',margin:'50%'},
+];
+
+// ── RENDER FUNCTIONS ───────────────────────────────────────────────
+function renderUsers(data) {
+  document.getElementById('usersBody').innerHTML = data.map(u => `
+    <tr>
+      <td><div class="td-main">${u.name}</div></td>
+      <td class="td-mono">${u.email}</td>
+      <td><strong style="color:${u.credits<1?'#c0405a':u.credits<5?'#b8860b':'#00a887'}">$${u.credits.toFixed(2)}</strong></td>
+      <td style="color:var(--mu2)">$${u.spent.toFixed(2)}</td>
+      <td>${u.gens.toLocaleString()}</td>
+      <td style="color:var(--mu);font-size:12px">${u.joined}</td>
+      <td><span class="status ${u.status==='active'?'s-active':'s-blocked'}"><span class="status-dot"></span>${u.status==='active'?'Activo':'Bloqueado'}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="act act-ghost" onclick="openUserDetail(${u.id})">Ver</button>
+        <button class="act act-primary" onclick="openAddCredits(${u.id},'${u.name}')">+ Créditos</button>
+        ${u.status==='active'?`<button class="act act-danger" onclick="blockUser('${u.name}')">Bloquear</button>`:`<button class="act act-ghost" onclick="unblockUser('${u.name}')">Desbloquear</button>`}
+      </td>
+    </tr>`).join('');
+}
+
+function renderTransactions() {
+  document.getElementById('txBody').innerHTML = TRANSACTIONS.map(t => `
+    <tr>
+      <td><div class="td-main">${t.user}</div></td>
+      <td>${t.pack}</td>
+      <td style="color:#00a887;font-weight:700">${t.amount}</td>
+      <td style="color:var(--mu2)">${t.credits}</td>
+      <td class="td-mono">${t.sid}</td>
+      <td style="color:var(--mu);font-size:12px">${t.date}</td>
+      <td><span class="status s-completed"><span class="status-dot"></span>Completada</span></td>
+    </tr>`).join('');
+}
+
+function renderModels() {
+  document.getElementById('modelsBody').innerHTML = MODELS_LIST.map((m,i) => `
+    <tr>
+      <td><div class="td-main">${m.name}</div></td>
+      <td style="color:var(--mu2)">${m.provider}</td>
+      <td><span class="tag" style="background:${typeColor(m.type)};color:${typeText(m.type)}">${m.type}</span></td>
+      <td class="td-mono">${m.cost}/unidad</td>
+      <td class="td-mono" style="color:#00a887">${m.price}/unidad</td>
+      <td style="color:#00a887;font-weight:700">${m.margin}</td>
+      <td>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" ${m.active?'checked':''} onchange="toggleModel(${i},this.checked)" style="accent-color:#6c63ff;width:15px;height:15px">
+          <span style="font-size:12px;color:${m.active?'#00a887':'var(--mu)'};">${m.active?'Activo':'Inactivo'}</span>
+        </label>
+      </td>
+      <td><button class="act act-ghost" onclick="editModel(${i})">Editar precio</button></td>
+    </tr>`).join('');
+}
+
+function renderUsage() {
+  document.getElementById('usageBody').innerHTML = USAGE_DATA.map(u => `
+    <tr>
+      <td><div class="td-main">${u.model}</div></td>
+      <td style="color:var(--mu2)">${u.provider}</td>
+      <td><span class="tag" style="background:${typeColor(u.type)};color:${typeText(u.type)}">${u.type}</span></td>
+      <td style="color:var(--mu2)">${u.gens.toLocaleString()}</td>
+      <td style="color:#00a887;font-weight:700">${u.revenue}</td>
+      <td style="color:#c0405a">${u.cost}</td>
+      <td style="color:#6c63ff;font-weight:700">${u.margin}</td>
+    </tr>`).join('');
+}
+
+function renderLogs() {
+  const models = ['Claude Sonnet','GPT Image','Gemini Flash','ElevenLabs','Suno','Flux','Claude Haiku'];
+  const users = ['jmartinez','andrea','carlos','diego','maria','roberto'];
+  const types = ['text','image','audio','music'];
+  const prompts = ['Escribe un email de ventas...','Genera una imagen de...','Crea una canción sobre...','Narra este texto...','Analiza el mercado de...'];
+  const logs = Array.from({length:15},(_,i)=>({
+    time: `${String(Math.floor(Math.random()*23)).padStart(2,'0')}:${String(Math.floor(Math.random()*59)).padStart(2,'0')}`,
+    user: users[Math.floor(Math.random()*users.length)],
+    model: models[Math.floor(Math.random()*models.length)],
+    type: types[Math.floor(Math.random()*types.length)],
+    prompt: prompts[Math.floor(Math.random()*prompts.length)],
+    cost: `$${(Math.random()*0.5+0.001).toFixed(4)}`,
+  }));
+  document.getElementById('logsBody').innerHTML = logs.map(l => `
+    <tr>
+      <td style="color:var(--mu);font-family:monospace;font-size:11px">${l.time}</td>
+      <td class="td-mono">${l.user}</td>
+      <td>${l.model}</td>
+      <td><span class="tag" style="background:${typeColor(l.type)};color:${typeText(l.type)}">${l.type}</span></td>
+      <td style="color:var(--mu2);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.prompt}</td>
+      <td style="color:#00a887;font-weight:600">${l.cost}</td>
+      <td><span class="status s-active"><span class="status-dot"></span>OK</span></td>
+    </tr>`).join('');
+}
+
+function renderRevenueChart() {
+  const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const values = [284,312,198,420,380,510,342];
+  const max = Math.max(...values);
+  document.getElementById('revenueChart').innerHTML = days.map((d,i) => `
+    <div class="bar-row">
+      <div class="bar-label">${d}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${(values[i]/max*100)}%;background:linear-gradient(90deg,#6c63ff,#ff6b9d)"></div></div>
+      <div class="bar-value" style="color:#6c63ff">$${values[i]}</div>
+    </div>`).join('');
+}
+
+function renderApiStatus() {
+  const apis = [
+    {name:'Anthropic (Claude)',status:'operational',latency:'142ms'},
+    {name:'OpenAI (GPT + DALL-E)',status:'operational',latency:'289ms'},
+    {name:'Google (Gemini + Imagen)',status:'operational',latency:'198ms'},
+    {name:'ElevenLabs',status:'operational',latency:'412ms'},
+    {name:'DeepSeek',status:'operational',latency:'320ms'},
+    {name:'Resend (Emails)',status:'operational',latency:'89ms'},
+    {name:'Stripe (Pagos)',status:'operational',latency:'201ms'},
+  ];
+  document.getElementById('apiStatus').innerHTML = apis.map(a => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="width:8px;height:8px;background:#00d4aa;border-radius:50%;display:block"></span>
+        <span style="font-size:13px;font-weight:500">${a.name}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span style="font-size:12px;color:var(--mu)">Latencia: ${a.latency}</span>
+        <span class="status s-active"><span class="status-dot"></span>Operativo</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderLiveFeed() {
+  const events = [
+    {icon:'⚡',text:'carlos@outlook.com generó con <strong>Claude Sonnet</strong>',time:'ahora'},
+    {icon:'💳',text:'andrea@empresa.cl recargó <strong>$50 USD</strong> (Creator Pack)',time:'hace 2 min'},
+    {icon:'🎨',text:'diego@empresa.com generó imagen con <strong>GPT Image</strong>',time:'hace 3 min'},
+    {icon:'🎵',text:'maria@gmail.com creó canción con <strong>Suno V4.5</strong>',time:'hace 5 min'},
+    {icon:'👤',text:'Nueva cuenta registrada: <strong>pedro@startup.cl</strong>',time:'hace 7 min'},
+    {icon:'💰',text:'Comisión pagada a <strong>Juan Martínez</strong>: +$6.00 USD',time:'hace 8 min'},
+  ];
+  document.getElementById('liveFeed').innerHTML = events.map(e => `
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)">
+      <span style="font-size:16px;flex-shrink:0">${e.icon}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;color:var(--tx2)">${e.text}</div>
+        <div style="font-size:11px;color:var(--mu);margin-top:2px">${e.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function typeColor(t){return{text:'rgba(108,99,255,.1)',image:'rgba(0,212,170,.1)',video:'rgba(255,107,157,.1)',audio:'rgba(255,209,102,.1)',music:'rgba(255,209,102,.1)'}[t]||'rgba(108,99,255,.1)'}
+function typeText(t){return{text:'#8a83ff',image:'#00a887',video:'#ff6b9d',audio:'#b8860b',music:'#b8860b'}[t]||'#8a83ff'}
+
+function filterUsers(q) {
+  const filtered = USERS.filter(u=>u.name.toLowerCase().includes(q.toLowerCase())||u.email.toLowerCase().includes(q.toLowerCase()));
+  renderUsers(filtered);
+}
+
+function toggleModel(i, val) {
+  MODELS_LIST[i].active = val;
+  const n = MODELS_LIST[i].name;
+  showToast(`Modelo ${n} ${val?'activado':'desactivado'}`);
+}
+
+function approveWithdrawal(name, amount) {
+  if(confirm(`¿Confirmar retiro de ${amount} para ${name}?\n\nAsegúrate de haber realizado la transferencia antes de aprobar.`)){
+    showToast(`✅ Retiro de ${name} marcado como pagado`);
+  }
+}
+function rejectWithdrawal() {
+  if(confirm('¿Rechazar esta solicitud de retiro? Se notificará al afiliado por email.')){
+    showToast('Retiro rechazado. Email de notificación enviado.');
+  }
+}
+function blockUser(name) {
+  if(confirm(`¿Bloquear la cuenta de ${name}?\nEl usuario no podrá iniciar sesión.`)){
+    showToast(`Usuario ${name} bloqueado`);
+  }
+}
+function unblockUser(name) { showToast(`Usuario ${name} desbloqueado`); }
+function openUserDetail(id) {
+  const u = USERS.find(x=>x.id===id);
+  openModal('userDetail', u);
+}
+function openAddCredits(id, name) { openModal('addCredits', {id, name}); }
+function editModel(i) { openModal('editModel', MODELS_LIST[i]); }
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+const TITLES = {overview:'Dashboard',realtime:'Tiempo real',users:'Todos los usuarios','new-users':'Nuevos usuarios hoy',affiliates:'Programa de afiliados',revenue:'Ingresos',transactions:'Transacciones',withdrawals:'Retiros de afiliados',usage:'Uso de modelos',logs:'Logs de generación',models:'Gestión de modelos',settings:'Configuración'};
+
+function showSection(name, el) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const sec = document.getElementById('section-'+name);
+  if(sec) sec.classList.add('active');
+  document.querySelectorAll('.ni').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('topTitle').innerHTML = `${TITLES[name]||name} <span class="tb-badge">ADMIN</span>`;
+}
+
+// ── MODALS ────────────────────────────────────────────────────────
+function openModal(type, data) {
+  const content = document.getElementById('modalContent');
+  let html = '';
+  if(type==='addCredits') {
+    html = `<div class="modal-header"><div class="modal-title">Agregar créditos manualmente</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-field"><label class="modal-label">Usuario</label><input class="modal-input" value="${data?.name||''}" readonly></div>
+    <div class="modal-field"><label class="modal-label">Cantidad de créditos ($USD)</label><input type="number" class="modal-input" placeholder="Ej: 5.00" step="0.50" min="0.50"></div>
+    <div class="modal-field"><label class="modal-label">Motivo</label><select class="modal-input"><option>Bono de bienvenida</option><option>Compensación por error</option><option>Premio de concurso</option><option>Test interno</option><option>Otro</option></select></div>
+    <div class="modal-actions"><button class="modal-btn modal-btn-ghost" onclick="closeModal()">Cancelar</button><button class="modal-btn modal-btn-solid" onclick="closeModal();showToast('✅ Créditos agregados correctamente')">Agregar créditos</button></div>`;
+  } else if(type==='newAnnouncement') {
+    html = `<div class="modal-header"><div class="modal-title">Nuevo anuncio para usuarios</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-field"><label class="modal-label">Título</label><input class="modal-input" placeholder="Ej: ¡Nuevo modelo disponible!"></div>
+    <div class="modal-field"><label class="modal-label">Mensaje</label><textarea class="modal-input" rows="4" placeholder="Texto del anuncio que verán los usuarios en el dashboard..."></textarea></div>
+    <div class="modal-field"><label class="modal-label">Tipo</label><select class="modal-input"><option>Información</option><option>Novedad</option><option>Mantenimiento</option><option>Urgente</option></select></div>
+    <div class="modal-actions"><button class="modal-btn modal-btn-ghost" onclick="closeModal()">Cancelar</button><button class="modal-btn modal-btn-solid" onclick="closeModal();showToast('📢 Anuncio publicado en el dashboard')">Publicar anuncio</button></div>`;
+  } else if(type==='editModel') {
+    html = `<div class="modal-header"><div class="modal-title">Editar precio: ${data?.name}</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-field"><label class="modal-label">Costo upstream (lo que pagas tú)</label><input type="text" class="modal-input" value="${data?.cost||''}"></div>
+    <div class="modal-field"><label class="modal-label">Precio para usuarios (lo que cobras)</label><input type="text" class="modal-input" value="${data?.price||''}"></div>
+    <div class="modal-field"><label class="modal-label">Margen calculado</label><input class="modal-input" value="${data?.margin||''}" readonly style="color:#00a887"></div>
+    <div class="modal-actions"><button class="modal-btn modal-btn-ghost" onclick="closeModal()">Cancelar</button><button class="modal-btn modal-btn-solid" onclick="closeModal();showToast('✅ Precio actualizado')">Guardar cambios</button></div>`;
+  } else if(type==='addModel') {
+    html = `<div class="modal-header"><div class="modal-title">Agregar nuevo modelo</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-field"><label class="modal-label">Nombre del modelo</label><input class="modal-input" placeholder="Ej: Kling V2.5"></div>
+    <div class="modal-field"><label class="modal-label">ID del modelo (para la API)</label><input class="modal-input" placeholder="Ej: kling-v2-5"></div>
+    <div class="modal-field"><label class="modal-label">Proveedor</label><select class="modal-input"><option>Anthropic</option><option>OpenAI</option><option>Google</option><option>Replicate</option><option>ElevenLabs</option><option>Suno</option><option>Otro</option></select></div>
+    <div class="modal-field"><label class="modal-label">Tipo</label><select class="modal-input"><option>text</option><option>image</option><option>video</option><option>audio</option><option>music</option></select></div>
+    <div class="modal-field"><label class="modal-label">Precio para usuarios ($USD/unidad)</label><input type="number" class="modal-input" placeholder="Ej: 0.08" step="0.001"></div>
+    <div class="modal-actions"><button class="modal-btn modal-btn-ghost" onclick="closeModal()">Cancelar</button><button class="modal-btn modal-btn-solid" onclick="closeModal();showToast('✅ Modelo agregado al marketplace')">Agregar modelo</button></div>`;
+  } else if(type==='userDetail') {
+    html = `<div class="modal-header"><div class="modal-title">Detalle: ${data?.name}</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:var(--ibg);border-radius:10px;padding:14px"><div class="sc-label">Créditos</div><div style="font-size:20px;font-weight:800;color:#00a887">$${data?.credits.toFixed(2)}</div></div>
+      <div style="background:var(--ibg);border-radius:10px;padding:14px"><div class="sc-label">Gasto total</div><div style="font-size:20px;font-weight:800;color:#6c63ff">$${data?.spent.toFixed(2)}</div></div>
+      <div style="background:var(--ibg);border-radius:10px;padding:14px"><div class="sc-label">Generaciones</div><div style="font-size:20px;font-weight:800">${data?.gens.toLocaleString()}</div></div>
+      <div style="background:var(--ibg);border-radius:10px;padding:14px"><div class="sc-label">Registro</div><div style="font-size:14px;font-weight:600">${data?.joined}</div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-ghost" onclick="closeModal()">Cerrar</button>
+      <button class="modal-btn" style="background:rgba(255,107,157,.1);color:#c0405a;border:1px solid rgba(255,107,157,.2)" onclick="closeModal();blockUser('${data?.name}')">Bloquear cuenta</button>
+      <button class="modal-btn modal-btn-solid" onclick="closeModal();openAddCredits(${data?.id},'${data?.name}')">+ Créditos</button>
+    </div>`;
+  }
+  content.innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#15152a;border:1px solid rgba(108,99,255,.3);color:#e8e8f8;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.4);animation:slideIn .3s ease';
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},3000);
+}
+
+// ── THEME ─────────────────────────────────────────────────────────
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('ttbtn').textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('kreaix_theme',t);}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+
+// ── REALTIME SIMULATION ───────────────────────────────────────────
+function updateRealtime(){
+  const online = 40 + Math.floor(Math.random()*20);
+  const gpm = 8 + Math.floor(Math.random()*10);
+  const rev = 40 + Math.floor(Math.random()*20);
+  if(document.getElementById('onlineCount')) document.getElementById('onlineCount').textContent = online;
+  if(document.getElementById('genPerMin')) document.getElementById('genPerMin').textContent = gpm;
+  if(document.getElementById('revenueHour')) document.getElementById('revenueHour').textContent = '$'+rev;
+}
+
+function refreshData(){showToast('🔄 Datos actualizados');}
+
+// ── INIT ──────────────────────────────────────────────────────────
+applyTheme(localStorage.getItem('kreaix_theme')||'dark');
+renderUsers(USERS);
+renderTransactions();
+renderModels();
+renderUsage();
+renderLogs();
+renderRevenueChart();
+renderApiStatus();
+renderLiveFeed();
+setInterval(updateRealtime, 4000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+const style = document.createElement('style');
+style.textContent='@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

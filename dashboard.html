@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kreaix — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* THEME TOKENS */
+[data-theme="light"]{
+  --bg:#f4f4fc;--sb:#ffffff;--sf:#eeeef8;--card:#ffffff;--card2:#f0f0fa;
+  --bd:rgba(0,0,0,.09);--bd2:rgba(108,99,255,.4);
+  --tx:#12121e;--tx2:#30304a;--mu:#8080a8;--mu2:#50507a;
+}
+*{font-style:normal!important;-webkit-font-smoothing:antialiased}
+body{transition:background .3s,color .3s}
+/* Theme toggle button */
+.ttoggle{width:34px;height:34px;border-radius:50%;background:var(--ibg,rgba(255,255,255,.05));border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .22s;flex-shrink:0}
+.ttoggle:hover{background:rgba(108,99,255,.15);border-color:#6c63ff}
+[data-theme="light"] .pgo{background:rgba(0,0,0,.5)}
+[data-theme="light"] .mc{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+:root,[data-theme='dark']{--bg:#0a0a14;--sb:#0d0d1a;--sf:#111120;--card:#15152a;--bd:rgba(255,255,255,0.07);--ac:#6c63ff;--ac2:#ff6b9d;--ac3:#00d4aa;--gold:#ffd166;--tx:#e8e8f8;--mu:#6060a0;--mu2:#9090c0;--sw:232px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;display:flex;min-height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sb{width:var(--sw);background:var(--sb);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:100;overflow-y:auto}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.lm{width:30px;height:30px;background:linear-gradient(135deg,#6c63ff,#ff6b9d);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;font-family:'Inter',sans-serif;flex-shrink:0}
+.lt{font-family:'Inter',sans-serif;font-weight:800;font-size:17px}.lt span{color:#6c63ff}
+.sb-nav{flex:1;padding:8px 0}
+.ns{padding:10px 16px 4px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(96,96,160,0.5);margin-top:6px}
+.ni{display:flex;align-items:center;gap:11px;padding:9px 18px;color:var(--mu2);text-decoration:none;font-size:13px;font-weight:500;cursor:pointer;transition:all .17s;border-left:2px solid transparent}
+.ni:hover{color:var(--tx);background:rgba(108,99,255,.06)}
+.ni.active{color:var(--tx);background:rgba(108,99,255,.1);border-left-color:#6c63ff}
+.ni-ic{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nb{margin-left:auto;background:#ff6b9d;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px}
+.nn{margin-left:auto;background:rgba(108,99,255,.25);color:#a89fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px}
+.sb-btm{padding:14px;border-top:1px solid var(--bd)}
+.cr-w{background:var(--sf);border:1px solid var(--bd);border-radius:11px;padding:13px;margin-bottom:10px}
+.cr-l{font-size:10px;color:var(--mu);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.cr-a{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#00d4aa;margin-bottom:7px}
+.cr-b{height:3px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden}
+.cr-f{height:100%;background:linear-gradient(90deg,#6c63ff,#00d4aa);width:62%}
+.rch{width:100%;padding:10px;background:#6c63ff;border:none;border-radius:9px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-bottom:10px}
+.rch:hover{background:#7d76ff}
+.ur{display:flex;align-items:center;gap:10px;padding:8px;border-radius:9px;cursor:pointer;transition:background .18s}
+.ur:hover{background:rgba(255,255,255,.04)}
+.ua{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#ff6b9d);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.un{font-size:13px;font-weight:500}.up{font-size:10px;color:var(--mu)}
+
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{height:54px;background:rgba(10,10,20,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0}
+.tt{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;flex:1}
+.sw{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:7px 13px;width:260px}
+.sw:focus-within{border-color:rgba(108,99,255,.4)}
+.sw input{background:none;border:none;outline:none;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;width:100%}
+.sw input::placeholder{color:var(--mu)}
+.tb{display:flex;gap:8px;margin-left:auto}
+.btn{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s}
+.bg{background:none;border:1px solid var(--bd);color:var(--mu)}.bg:hover{border-color:#6c63ff;color:var(--tx)}
+.bs{background:#6c63ff;border:none;color:#fff}.bs:hover{background:#7d76ff}
+
+/* MARKET */
+.mkt{display:flex;flex:1;overflow:hidden}
+.fc{width:210px;border-right:1px solid var(--bd);overflow-y:auto;flex-shrink:0;padding:14px 0}
+.ftabs{display:flex;margin:0 12px 14px;background:var(--sf);border-radius:9px;padding:2px}
+.ftab{flex:1;padding:6px 0;text-align:center;font-size:11px;font-weight:700;cursor:pointer;border-radius:7px;color:var(--mu);border:none;background:none;font-family:'Inter',sans-serif;transition:all .18s}
+.ftab.active{background:#6c63ff;color:#fff}
+.fst{font-size:10px;font-weight:700;color:rgba(96,96,160,.55);text-transform:uppercase;letter-spacing:1px;padding:0 12px;margin-bottom:7px;margin-top:2px}
+.pg{display:flex;flex-wrap:wrap;gap:5px;padding:0 12px;margin-bottom:14px}
+.fp{padding:5px 11px;border-radius:100px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bd);color:var(--mu);transition:all .17s;background:none;font-family:'Inter',sans-serif}
+.fp:hover{border-color:#6c63ff;color:var(--tx)}.fp.active{background:#6c63ff;border-color:#6c63ff;color:#fff}
+.gc{flex:1;overflow-y:auto;padding:20px}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+
+/* MODEL CARD */
+.mc{background:var(--card);border:1px solid var(--bd);border-radius:15px;overflow:hidden;cursor:pointer;transition:all .22s;position:relative}
+.mc:hover{border-color:rgba(108,99,255,.45);transform:translateY(-3px);box-shadow:0 12px 36px rgba(108,99,255,.1)}
+.mth{width:100%;height:140px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.me{font-size:52px;opacity:.18;position:absolute}
+.mg2{position:absolute;bottom:0;left:0;right:0;height:65%;background:linear-gradient(transparent,var(--card))}
+.mp{position:absolute;top:9px;left:11px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:100px;opacity:.9}
+.mn{position:absolute;bottom:9px;left:11px;font-family:'Inter',sans-serif;font-weight:700;font-size:16px;line-height:1.1}
+.newp{position:absolute;top:9px;right:9px;background:#ff6b9d;color:#fff;font-size:8px;font-weight:700;padding:3px 8px;border-radius:100px;letter-spacing:.5px}
+.mi{padding:11px 13px}
+.mtags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.mt{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid}
+.tc{color:#a89fff;border-color:rgba(168,159,255,.3);background:rgba(108,99,255,.1)}
+.tv{color:#ff9fd4;border-color:rgba(255,107,157,.3);background:rgba(255,107,157,.1)}
+.ti{color:#7fefda;border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.1)}
+.tm{color:#ffe07f;border-color:rgba(255,209,102,.3);background:rgba(255,209,102,.1)}
+.ta{color:#ffc97f;border-color:rgba(255,180,50,.3);background:rgba(255,180,50,.1)}
+.te{color:#c4ff7f;border-color:rgba(150,255,50,.3);background:rgba(150,255,50,.08)}
+.mf{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:1px solid var(--bd)}
+.mco{font-size:11px;color:var(--mu)}.mco strong{color:#00d4aa;font-weight:600}
+.ub{padding:5px 13px;background:#6c63ff;border:none;border-radius:7px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s}
+.ub:hover{background:#7d76ff}
+
+/* PLAYGROUND OVERLAY */
+.pgo{position:fixed;inset:0;z-index:200;display:flex;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .25s}
+.pgo.open{opacity:1;pointer-events:all}
+.pgp{display:flex;flex-direction:column;width:100%;height:100%;transform:scale(.98);transition:transform .25s}
+.pgo.open .pgp{transform:scale(1)}
+
+/* PG TOP */
+.pgt{height:52px;background:rgba(10,10,20,.98);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0}
+.pgb{display:flex;align-items:center;gap:7px;color:var(--mu2);cursor:pointer;font-size:13px;font-weight:500;transition:color .18s;background:none;border:none;font-family:'Inter',sans-serif;padding:0}
+.pgb:hover{color:var(--tx)}
+.pgmn{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;margin-left:4px}
+.pgms{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px}
+.pgtabs{display:flex;border-bottom:1px solid var(--bd);background:rgba(10,10,20,.98);flex-shrink:0}
+.pgtab{padding:11px 20px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .17s;font-family:'Inter',sans-serif}
+.pgtab:hover{color:var(--tx)}.pgtab.active{color:#6c63ff;border-bottom-color:#6c63ff}
+
+/* PG BODY */
+.pgbd{display:flex;flex:1;overflow:hidden}
+.pgin{width:310px;border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+.pginh{padding:13px 15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.piht{font-size:13px;font-weight:600}
+.mt2{display:flex;background:rgba(255,255,255,.05);border-radius:8px;padding:2px}
+.mb{padding:5px 13px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--mu);transition:all .18s;font-family:'Inter',sans-serif}
+.mb.active{background:#6c63ff;color:#fff}
+.pgmb{padding:11px 15px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.pgmbn{font-size:13px;font-weight:600}.pgmbs{font-size:10px;color:var(--mu);margin-top:1px}
+.pgmbc{font-size:11px;font-weight:700;color:#00d4aa}
+.pginb{padding:14px;flex:1}
+
+.tip{background:rgba(108,99,255,.06);border:1px solid rgba(108,99,255,.15);border-radius:9px;padding:9px 12px;margin-bottom:13px;display:flex;gap:8px;align-items:flex-start}
+.tipi{font-size:13px;flex-shrink:0;margin-top:1px}
+.tipt{font-size:12px;color:var(--mu2);line-height:1.5}
+.fl{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.fl span{font-weight:400;text-transform:none;letter-spacing:0;color:rgba(96,96,160,.6);font-size:10px}
+.tpls{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px}
+.tp{padding:5px 10px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--bd);color:var(--mu);cursor:pointer;transition:all .15s;background:none;font-family:'Inter',sans-serif}
+.tp:hover{border-color:#6c63ff;color:var(--tx)}
+.pa{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:10px;padding:11px;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;resize:vertical;min-height:100px;outline:none;transition:border-color .2s;line-height:1.6;margin-bottom:4px}
+.pa:focus{border-color:#6c63ff}.pa::placeholder{color:var(--mu)}
+.cc{font-size:10px;color:var(--mu);text-align:right;margin-bottom:12px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.fb{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:9px;padding:9px 11px;cursor:pointer;transition:all .17s}
+.fb:hover{border-color:rgba(108,99,255,.4)}.fb.sel{border-color:#6c63ff;background:rgba(108,99,255,.1)}
+.fbl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.fbv{font-size:13px;font-weight:600}.fbs{font-size:10px;color:var(--mu);margin-top:1px}
+.sg{display:flex;background:rgba(255,255,255,.04);border-radius:8px;padding:2px;gap:2px;margin-bottom:13px}
+.sgb{flex:1;padding:7px 0;text-align:center;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--mu);transition:all .17s;font-family:'Inter',sans-serif}
+.sgb.active{background:#6c63ff;color:#fff}
+.sf2{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:9px;padding:9px 12px;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;outline:none;cursor:pointer;appearance:none;margin-bottom:12px}
+.sf2:focus{border-color:#6c63ff}
+.adv{background:rgba(255,255,255,.02);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:12px}
+.at{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.slr{margin-bottom:10px}
+.sll{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.sln{font-size:12px;color:var(--mu2)}.slv{font-size:12px;font-weight:600;color:#a89fff}
+.sl{width:100%;height:3px;border-radius:2px;appearance:none;background:rgba(108,99,255,.2);outline:none;cursor:pointer}
+.sl::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:#6c63ff;cursor:pointer}
+.cb2{display:flex;align-items:center;justify-content:space-between;background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.15);border-radius:9px;padding:10px 13px;margin-bottom:12px}
+.cl{font-size:12px;color:var(--mu)}.ca{font-size:14px;font-weight:700;color:#00d4aa}
+.rb{width:100%;padding:13px;background:linear-gradient(135deg,#6c63ff,#ff6b9d);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.rb:hover{opacity:.9;transform:translateY(-1px)}.rb:active{transform:scale(.99)}.rb.ld{opacity:.65;cursor:not-allowed;transform:none}
+
+/* OUTPUT */
+.pout{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.oh{padding:13px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ot{font-size:13px;font-weight:600;flex:1}
+.ob2{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px}
+.vt{display:flex;background:rgba(255,255,255,.05);border-radius:7px;padding:2px}
+.vb{padding:4px 11px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--mu);font-family:'Inter',sans-serif;transition:all .15s}
+.vb.active{background:rgba(255,255,255,.1);color:var(--tx)}
+.obody{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.es{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mu);text-align:center;padding:40px;min-height:280px}
+.ei{font-size:48px;margin-bottom:16px;opacity:.3}.ett{font-size:15px;font-weight:600;margin-bottom:8px}
+.esb{font-size:13px;line-height:1.6;max-width:260px}
+.rc{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.rch2{padding:11px 15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mu)}
+.rcb{padding:16px}
+.rt{font-size:14px;line-height:1.75;color:var(--tx);white-space:pre-wrap}
+.rac{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)}
+.ra{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .17s;display:flex;align-items:center;gap:5px}
+.rs{background:#6c63ff;border:none;color:#fff}.rs:hover{background:#7d76ff}
+.rg{background:none;border:1px solid var(--bd);color:var(--mu)}.rg:hover{border-color:#6c63ff;color:var(--tx)}
+.lds{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;gap:16px;min-height:280px}
+.ldd{display:flex;gap:8px}
+.dt{width:10px;height:10px;border-radius:50%;animation:bl 1.4s infinite}
+.dt:nth-child(1){background:#6c63ff}.dt:nth-child(2){background:#ff6b9d;animation-delay:.2s}.dt:nth-child(3){background:#00d4aa;animation-delay:.4s}
+@keyframes bl{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+.ldt{font-size:13px;color:var(--mu)}
+
+/* EXAMPLES */
+.exs{flex:1;overflow-y:auto;padding:20px}
+.exg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.exc{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s}
+.exc:hover{border-color:rgba(108,99,255,.4);transform:translateY(-2px)}
+.ext{width:100%;height:76px;border-radius:8px;margin-bottom:9px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.extt{font-size:12px;font-weight:700;margin-bottom:3px}.exts{font-size:11px;color:var(--mu);line-height:1.4}
+
+/* README */
+.rms{flex:1;overflow-y:auto;padding:24px;max-width:640px}
+.rms h2{font-family:'Inter',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px}
+.rms h3{font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--mu2)}
+.rms p{font-size:13px;line-height:1.75;color:var(--mu2);margin-bottom:12px}
+.rms code{background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:5px;padding:2px 6px;font-size:12px;font-family:monospace}
+.rtip{background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.15);border-radius:10px;padding:12px 15px;font-size:12px;color:#7fefda;line-height:1.6;margin-top:16px}
+
+/* API */
+.aps{flex:1;overflow-y:auto;padding:24px;max-width:660px}
+.aps h3{font-size:13px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cdb{background:#060610;border:1px solid var(--bd);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;overflow-x:auto;margin-bottom:18px;position:relative}
+.cpc{position:absolute;top:10px;right:10px;padding:4px 10px;background:rgba(255,255,255,.07);border:1px solid var(--bd);border-radius:6px;font-size:10px;font-weight:600;color:var(--mu);cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s}
+.cpc:hover{color:var(--tx)}
+.cp{color:#a89fff}.cg{color:#00d4aa}.cy{color:#ffd166}.cm{color:#6060a0}
+
+/* SECTIONS */
+.sw2{flex:1;overflow-y:auto;padding:28px}
+.stt{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-0.3px}
+.ssb{font-size:14px;color:var(--mu);margin-bottom:24px}
+.sg2{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.sc{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px}
+.scl{font-size:11px;color:var(--mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.scv{font-family:'Inter',sans-serif;font-size:26px;font-weight:800}
+.scs{font-size:11px;color:var(--mu);margin-top:4px}
+.dt2{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:20px}
+.dth{display:grid;padding:12px 18px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.8px}
+.dtr{display:grid;padding:14px 18px;border-bottom:1px solid var(--bd);font-size:13px;align-items:center;transition:background .15s}
+.dtr:last-child{border:none}.dtr:hover{background:rgba(255,255,255,.02)}
+.pkg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:760px;margin-bottom:24px}
+.pkc{background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.pkc:hover{border-color:rgba(108,99,255,.4);transform:translateY(-2px)}.pkc.sel{border-color:#6c63ff;background:rgba(108,99,255,.06)}
+.pkc.pop::before{content:'MÁS POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#6c63ff;color:#fff;font-size:9px;font-weight:700;padding:3px 12px;border-radius:100px;letter-spacing:.5px}
+.pkp{font-family:'Inter',sans-serif;font-size:36px;font-weight:800;margin:10px 0 4px}
+.pkn{font-size:14px;font-weight:700}.pkd{font-size:12px;color:var(--mu);margin-top:4px}
+.pb{padding:13px 32px;background:#6c63ff;border:none;border-radius:11px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.pb:hover{background:#7d76ff;transform:translateY(-1px)}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;max-width:800px}
+.ac2{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:22px}
+.am{font-family:'Inter',sans-serif;font-size:32px;font-weight:800;margin-bottom:4px}
+.al{font-size:12px;color:var(--mu)}
+.lbx{display:flex;gap:10px;align-items:center;background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:10px 14px}
+.lu{flex:1;font-size:13px;color:#00d4aa;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpb{padding:7px 16px;background:#6c63ff;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.el{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;max-width:640px}
+.er{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bd);gap:12px}
+.er:last-child{border:none}
+.ea{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.en{font-size:13px;font-weight:500}.esub{font-size:11px;color:var(--mu)}.eamt{margin-left:auto;font-weight:700;font-size:14px;color:#00d4aa}
+.kb{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;max-width:680px;margin-bottom:16px}
+.kr{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bd);gap:12px}
+.kr:last-child{border:none}.kn{font-size:13px;font-weight:500;flex:1}
+.kv{font-size:12px;color:var(--mu);font-family:'Courier New',monospace;flex:2}
+.kd{font-size:11px;color:var(--mu)}.kdl{padding:5px 12px;background:rgba(255,50,50,.08);border:1px solid rgba(255,50,50,.2);border-radius:7px;color:#ff7f7f;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif}
+.ak{padding:11px 22px;background:#6c63ff;border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-bottom:16px}
+.ak:hover{background:#7d76ff}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(108,99,255,.3);border-radius:100px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo"><div class="lm">N</div><div class="lt">Krea<span>ix</span></div></div>
+  <nav class="sb-nav">
+    <div class="ns">Principal</div>
+    <div class="ni active" data-sec="market"><span class="ni-ic">🛒</span>Models Market</div>
+    <div class="ni" data-sec="precios"><span class="ni-ic">💎</span>Precios</div>
+    <div class="ns">Cuenta</div>
+    <div class="ni" data-sec="claves"><span class="ni-ic">🔑</span>Claves API</div>
+    <div class="ni" data-sec="pagos"><span class="ni-ic">💳</span>Administración de pagos</div>
+    <div class="ni" data-sec="usage"><span class="ni-ic">📊</span>API Usage</div>
+    <div class="ni" data-sec="registros"><span class="ni-ic">📋</span>Registros<span class="nb">12</span></div>
+    <div class="ns">Comunidad</div>
+    <div class="ni" data-sec="afiliados"><span class="ni-ic">🤝</span>Programa de Afiliados</div>
+    <div class="ni"><span class="ni-ic">📖</span>Documentación<span class="nn">DOCS</span></div>
+    <div class="ni"><span class="ni-ic">💬</span>Discord</div>
+    <div class="ns">Sistema</div>
+    <div class="ni"><span class="ni-ic">⚙️</span>Configuración</div>
+    <div class="ni" onclick="location.href='index.html'"><span class="ni-ic">🚪</span>Cerrar sesión</div>
+  </nav>
+  <div class="sb-btm">
+    <div class="cr-w"><div class="cr-l">Créditos disponibles</div><div class="cr-a">$12.40</div><div class="cr-b"><div class="cr-f"></div></div></div>
+    <button class="rch" onclick="gos('pagos')">+ Recargar créditos</button>
+    <div class="ur"><div class="ua">T</div><div><div class="un">Tu Nombre</div><div class="up">Plan Starter</div></div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tt" id="tt">Models Market</div>
+    <button class="ttoggle" onclick="toggleTheme()" id="ttbtn" title="Cambiar tema">🌙</button>
+    <div class="sw"><span style="color:var(--mu);font-size:14px">🔍</span><input type="text" placeholder="Buscar modelo..." id="si" oninput="af()"></div>
+    <div class="tb">
+      <button class="btn bg" onclick="location.href='index.html'">← Inicio</button>
+      <button class="btn bs" onclick="gos('pagos')">+ Recargar</button>
+    </div>
+  </div>
+
+  <!-- MARKET -->
+  <div id="s-market" style="display:flex;flex:1;overflow:hidden">
+    <div class="fc">
+      <div style="padding:0 12px;margin-bottom:10px;display:flex;gap:4px">
+        <button class="ftab active">Tareas</button>
+        <button class="ftab">Proveedores</button>
+      </div>
+      <div class="fst">Video</div>
+      <div class="pg">
+        <button class="fp active" onclick="fc2('all',this)">Todos</button>
+        <button class="fp" onclick="fc2('t2v',this)">Text→Video</button>
+        <button class="fp" onclick="fc2('i2v',this)">Img→Video</button>
+        <button class="fp" onclick="fc2('v2v',this)">Video→Video</button>
+        <button class="fp" onclick="fc2('edit-v',this)">Video Edit</button>
+        <button class="fp" onclick="fc2('s2v',this)">Speech→Video</button>
+        <button class="fp" onclick="fc2('lip',this)">Lip Sync</button>
+      </div>
+      <div class="fst">Imagen</div>
+      <div class="pg">
+        <button class="fp" onclick="fc2('t2i',this)">Text→Imagen</button>
+        <button class="fp" onclick="fc2('i2i',this)">Img→Imagen</button>
+        <button class="fp" onclick="fc2('edit-i',this)">Image Edit</button>
+      </div>
+      <div class="fst">Música / Audio</div>
+      <div class="pg">
+        <button class="fp" onclick="fc2('t2m',this)">Text→Música</button>
+        <button class="fp" onclick="fc2('tts',this)">Text→Voz</button>
+        <button class="fp" onclick="fc2('s2t',this)">Voz→Text</button>
+        <button class="fp" onclick="fc2('a2a',this)">Audio→Audio</button>
+      </div>
+      <div class="fst">Chat</div>
+      <div class="pg"><button class="fp" onclick="fc2('chat',this)">Chat / Texto</button></div>
+    </div>
+    <div class="gc"><div class="mg" id="mg"></div></div>
+  </div>
+
+  <!-- SECTION PRECIOS -->
+  <div id="s-precios" style="display:none;flex:1;overflow-y:auto"><div class="sw2">
+    <div class="stt">Precios</div><div class="ssb">Sistema de créditos — pagas solo lo que usas.</div>
+    <div class="pkg">
+      <div class="pkc" onclick="sp(this)"><div class="pkn">Starter</div><div class="pkp">$5</div><div class="pkd">500 créditos · Sin venc.</div></div>
+      <div class="pkc pop sel" onclick="sp(this)"><div class="pkn">Pro Pack</div><div class="pkp" style="color:#6c63ff">$20</div><div class="pkd">+10% bonus · 2.200 créditos</div></div>
+      <div class="pkc" onclick="sp(this)"><div class="pkn">Creator</div><div class="pkp">$50</div><div class="pkd">+20% bonus · 6.000 créditos</div></div>
+    </div>
+    <button class="pb" onclick="gos('pagos')">💳 Ir a pagar</button>
+  </div></div>
+
+  <!-- SECTION PAGOS -->
+  <div id="s-pagos" style="display:none;flex:1;overflow-y:auto"><div class="sw2">
+    <div class="stt">Administración de pagos</div><div class="ssb">Recarga con tarjeta de crédito/débito de forma segura.</div>
+    <div class="pkg">
+      <div class="pkc" onclick="sp(this)"><div class="pkn">Starter</div><div class="pkp">$5</div><div class="pkd">500 créditos</div></div>
+      <div class="pkc pop sel" onclick="sp(this)"><div class="pkn">Pro Pack</div><div class="pkp" style="color:#6c63ff">$20</div><div class="pkd">+10% · 2.200 créditos</div></div>
+      <div class="pkc" onclick="sp(this)"><div class="pkn">Creator</div><div class="pkp">$50</div><div class="pkd">+20% · 6.000 créditos</div></div>
+    </div>
+    <button class="pb">💳 Pagar con Stripe</button>
+    <div style="margin-top:28px;font-size:13px;font-weight:700;color:var(--mu2);margin-bottom:12px">Historial</div>
+    <div class="dt2" style="max-width:680px">
+      <div class="dth" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Pack</span><span>Créditos</span><span>Monto</span><span>Fecha</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Pro Pack</span><span style="color:#00d4aa">+2.200</span><span>$20.00</span><span style="color:var(--mu)">Hace 3 días</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Starter</span><span style="color:#00d4aa">+500</span><span>$5.00</span><span style="color:var(--mu)">Hace 2 sem.</span></div>
+    </div>
+  </div></div>
+
+  <!-- SECTION USAGE -->
+  <div id="s-usage" style="display:none;flex:1;overflow-y:auto"><div class="sw2">
+    <div class="stt">API Usage</div><div class="ssb">Consumo de créditos — últimos 30 días.</div>
+    <div class="sg2">
+      <div class="sc"><div class="scl">Gastado este mes</div><div class="scv" style="color:#6c63ff">$7.60</div><div class="scs">↑ 12% vs anterior</div></div>
+      <div class="sc"><div class="scl">Peticiones totales</div><div class="scv" style="color:#ff6b9d">1,247</div><div class="scs">↑ 8% vs anterior</div></div>
+      <div class="sc"><div class="scl">Modelo más usado</div><div class="scv" style="font-size:16px;color:#00d4aa">Claude Sonnet</div><div class="scs">842 peticiones</div></div>
+      <div class="sc"><div class="scl">Créditos restantes</div><div class="scv" style="color:#ffd166">$12.40</div><div class="scs">1.240 créditos</div></div>
+    </div>
+    <div class="dt2">
+      <div class="dth" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Modelo</span><span>Tipo</span><span>Llamadas</span><span>Gasto</span><span>Últ. uso</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Claude Sonnet 4.6</span><span style="color:var(--mu)">Chat</span><span>842</span><span style="color:#00d4aa">$5.05</span><span style="color:var(--mu)">Hace 5 min</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>GPT Image 2.0</span><span style="color:var(--mu)">Imagen</span><span>31</span><span style="color:#00d4aa">$2.48</span><span style="color:var(--mu)">Hace 1h</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Suno V4.5</span><span style="color:var(--mu)">Música</span><span>7</span><span style="color:#00d4aa">$0.07</span><span style="color:var(--mu)">Ayer</span></div>
+    </div>
+  </div></div>
+
+  <!-- SECTION REGISTROS -->
+  <div id="s-registros" style="display:none;flex:1;overflow-y:auto"><div class="sw2">
+    <div class="stt">Registros de uso</div><div class="ssb">Historial completo de generaciones.</div>
+    <div class="dt2">
+      <div class="dth" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Modelo</span><span>Tipo</span><span>Costo</span><span>Fecha</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Claude Sonnet 4.6</span><span style="color:var(--mu)">Chat</span><span style="color:#00d4aa">$0.006</span><span style="color:var(--mu)">Hace 5 min</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>GPT Image 2.0</span><span style="color:var(--mu)">T→I</span><span style="color:#00d4aa">$0.08</span><span style="color:var(--mu)">Hace 1h</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Suno V4.5</span><span style="color:var(--mu)">T→M</span><span style="color:#00d4aa">$0.10</span><span style="color:var(--mu)">Ayer</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Veo 3.1</span><span style="color:var(--mu)">T→V</span><span style="color:#00d4aa">$2.80</span><span style="color:var(--mu)">Hace 2 días</span></div>
+      <div class="dtr" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Flux.1 Kontext</span><span style="color:var(--mu)">T→I</span><span style="color:#00d4aa">$0.08</span><span style="color:var(--mu)">Hace 2 días</span></div>
+    </div>
+  </div></div>
+
+  <!-- SECTION AFILIADOS -->
+  <div id="s-afiliados" style="display:none;flex:1;overflow-y:auto"><div class="sw2">
+    <div class="stt">Programa de Afiliados</div><div class="ssb">Comparte tu link y gana el 30% de cada recarga.</div>
+    <div class="ag">
+      <div class="ac2"><div class="al">Comisión por referido</div><div class="am" style="color:#00d4aa">30%</div><div class="al">de cada recarga</div></div>
+      <div class="ac2"><div class="al">Ganado este mes</div><div class="am" style="color:#6c63ff">$127.00</div><div class="al">8 referidos activos</div></div>
+      <div class="ac2"><div class="al">Período de cookie</div><div class="am" style="color:#ff6b9d">12 meses</div><div class="al">por referido</div></div>
+      <div class="ac2"><div class="al">Saldo disponible</div><div class="am" style="color:#ffd166">$127.00</div><button onclick="alert('Retiro mínimo $20 USD')" style="margin-top:10px;padding:8px 18px;background:#6c63ff;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">Retirar</button></div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--mu2);margin-bottom:10px">Tu link de afiliado</div>
+    <div class="lbx" style="max-width:640px;margin-bottom:24px"><div class="lu">https://kreaix.com/?ref=TU_CODIGO</div><button class="cpb" onclick="this.textContent='✅';setTimeout(()=>this.textContent='Copiar',2000)">Copiar</button></div>
+    <div style="font-size:13px;font-weight:700;color:var(--mu2);margin-bottom:10px">Referidos recientes</div>
+    <div class="el">
+      <div class="er"><div class="ea" style="background:linear-gradient(135deg,#6c63ff,#ff6b9d)">M</div><div><div class="en">María González</div><div class="esub">Se unió hace 3 días</div></div><div class="eamt">+$6.00</div></div>
+      <div class="er"><div class="ea" style="background:linear-gradient(135deg,#ff6b9d,#ffd166)">J</div><div><div class="en">Juan Martínez</div><div class="esub">Recargó $50 hoy</div></div><div class="eamt">+$15.00</div></div>
+      <div class="er"><div class="ea" style="background:linear-gradient(135deg,#00d4aa,#6c63ff)">A</div><div><div class="en">Andrea López</div><div class="esub">Recargó $20 ayer</div></div><div class="eamt">+$6.00</div></div>
+    </div>
+  </div></div>
+
+  <!-- SECTION CLAVES -->
+  <div id="s-claves" style="display:none;flex:1;overflow-y:auto"><div class="sw2">
+    <div class="stt">Claves API</div><div class="ssb">Integra Kreaix directamente en tus aplicaciones.</div>
+    <button class="ak">+ Crear nueva clave API</button>
+    <div class="kb"><div class="kr"><div class="kn">clave-produccion-1</div><div class="kv">nxs_sk_••••••••••••••••••••••••</div><div class="kd" style="margin-right:10px">Hace 3 días</div><button class="kdl">Revocar</button></div></div>
+  </div></div>
+
+</div><!-- /main -->
+
+<!-- ══════════ PLAYGROUND OVERLAY ══════════ -->
+<div class="pgo" id="pgo">
+  <div class="pgp">
+    <!-- PG TOPBAR -->
+    <div class="pgt">
+      <button class="pgb" onclick="cpg()">← Volver al Market</button>
+      <div style="width:1px;height:20px;background:var(--bd);margin:0 4px"></div>
+      <div><div class="pgmn" id="pgn">GPT Image 2.0</div><div class="pgms" id="pgs">OpenAI · Generación de imágenes</div></div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button class="btn bg" style="font-size:12px">Compartir</button>
+        <button class="btn bs" style="font-size:12px">⚡ API Key</button>
+      </div>
+    </div>
+    <!-- PG TABS -->
+    <div class="pgtabs">
+      <button class="pgtab active" onclick="pt('play',this)">▷ Playground</button>
+      <button class="pgtab" onclick="pt('ex',this)">◫ Ejemplos</button>
+      <button class="pgtab" onclick="pt('rm',this)">☰ README</button>
+      <button class="pgtab" onclick="pt('ap',this)">&lt;/&gt; API</button>
+    </div>
+    <!-- PG BODY -->
+    <div class="pgbd">
+      <!-- INPUT PANEL -->
+      <div class="pgin">
+        <div class="pginh"><span class="piht">Parámetros</span>
+          <div class="mt2"><button class="mb active" onclick="sm('simple')">Simple</button><button class="mb" onclick="sm('adv')">Avanzado</button></div>
+        </div>
+        <div class="pgmb"><div><div class="pgmbn" id="pbn">GPT Image 2.0</div><div class="pgmbs" id="pbs">Text to Image · Image to Image</div></div><div class="pgmbc" id="pbc">$0.08/img</div></div>
+        <div class="pginb">
+          <!-- SIMPLE -->
+          <div id="smc">
+            <div class="tip"><span class="tipi">💡</span><div class="tipt" id="ptip">Describe lo que quieres crear en detalle.</div></div>
+            <div class="fl">Sugerencias rápidas</div>
+            <div class="tpls" id="ptpls"></div>
+          </div>
+          <div class="fl">Tu instrucción <span>(requerido)</span></div>
+          <textarea class="pa" id="pp" placeholder="Describe lo que quieres crear..." oninput="document.getElementById('pcc').textContent=this.value.length+' caracteres'"></textarea>
+          <div class="cc" id="pcc">0 caracteres</div>
+          <!-- SIMPLE OPTIONS -->
+          <div id="sop">
+            <div class="fl">Formato</div>
+            <div class="fg" id="pfg"></div>
+            <div class="fl">Estilo</div>
+            <div class="sg" id="psg"></div>
+          </div>
+          <!-- ADVANCED -->
+          <div id="adop" style="display:none">
+            <div class="adv">
+              <div class="at">Parámetros</div>
+              <div class="fl">Resolución</div>
+              <div class="sg" style="margin-bottom:12px"><button class="sgb active">1K</button><button class="sgb" onclick="sgsel(this)">2K</button><button class="sgb" onclick="sgsel(this)">4K</button></div>
+              <div class="fl">Aspect ratio</div>
+              <select class="sf2"><option>auto (recomendado)</option><option>1:1 — Cuadrada</option><option>16:9 — Panorámica</option><option>9:16 — Vertical</option><option>4:3 — Tradicional</option></select>
+              <div class="slr"><div class="sll"><span class="sln">Calidad</span><span class="slv" id="qv">8</span></div><input type="range" class="sl" min="1" max="10" value="8" step="1" oninput="document.getElementById('qv').textContent=this.value"></div>
+              <div class="slr"><div class="sll"><span class="sln">Creatividad</span><span class="slv" id="cv">6</span></div><input type="range" class="sl" min="1" max="10" value="6" step="1" oninput="document.getElementById('cv').textContent=this.value"></div>
+            </div>
+            <div class="adv">
+              <div class="at">Salida</div>
+              <div class="fl">Formato de archivo</div>
+              <div class="sg" style="margin-bottom:12px"><button class="sgb active">PNG</button><button class="sgb" onclick="sgsel(this)">JPEG</button><button class="sgb" onclick="sgsel(this)">WebP</button></div>
+              <div class="fl">Negative prompt <span>(qué evitar)</span></div>
+              <textarea class="pa" style="min-height:56px;font-size:12px" placeholder="borroso, pixelado, texto, marcas de agua..."></textarea>
+            </div>
+          </div>
+          <div class="cb2"><span class="cl">Costo estimado</span><span class="ca" id="pcd">$0.08 USD</span></div>
+          <button class="rb" id="prb" onclick="pgrun()">
+            <span id="pri">⚡</span><span id="prt">Crear ahora</span><span id="prc" style="font-size:11px;opacity:.8;margin-left:2px">6 créditos</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: output + tab content -->
+      <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+        <!-- PLAYGROUND TAB -->
+        <div id="t-play" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div class="oh">
+            <span class="ot">Resultado</span>
+            <span class="ob2" id="pob" style="background:rgba(0,212,170,.15);color:#00d4aa">Imagen</span>
+            <div class="vt" style="margin-left:auto">
+              <button class="vb active" onclick="vm('prev',this)">Preview</button>
+              <button class="vb" onclick="vm('json',this)">JSON</button>
+            </div>
+          </div>
+          <div class="obody" id="pob2">
+            <div class="es"><div class="ei" id="pei">🎨</div><div class="ett">Listo para crear</div><div class="esb" id="pes">Escribe tu instrucción y presiona Crear ahora</div></div>
+          </div>
+        </div>
+        <!-- EXAMPLES TAB -->
+        <div id="t-ex" style="display:none;flex:1;overflow-y:auto">
+          <div class="exs">
+            <div style="font-size:15px;font-weight:700;margin-bottom:5px">Ejemplos y casos de uso</div>
+            <div style="font-size:13px;color:var(--mu);margin-bottom:18px">Haz clic para cargar el prompt en el playground</div>
+            <div class="exg" id="pex"></div>
+          </div>
+        </div>
+        <!-- README TAB -->
+        <div id="t-rm" style="display:none;flex:1;overflow-y:auto"><div class="rms" id="prm"></div></div>
+        <!-- API TAB -->
+        <div id="t-ap" style="display:none;flex:1;overflow-y:auto">
+          <div class="aps">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">Integración via API</div>
+            <div style="font-size:13px;color:var(--mu);margin-bottom:18px">Usa este modelo en tu propio código con la API de Kreaix</div>
+            <h3>Endpoint</h3><div class="cdb" id="pac"><button class="cpc" onclick="cpc2('pac',this)">Copiar</button></div>
+            <h3>Respuesta</h3><div class="cdb" id="par"></div>
+            <div class="rtip">Obtén tu API key en <strong>Ajustes → Claves API</strong>. Los créditos se descuentan automáticamente.</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /pgbd -->
+  </div>
+</div><!-- /pgo -->
+
+<script>
+// ── DATA ─────────────────────────────────────────────────
+const MD = [
+  {id:'claude-sonnet',name:'Claude Sonnet 4.6',pv:'Anthropic',pvs:'Anthropic',bg:'linear-gradient(135deg,#1a1028,#2d1045)',em:'🤖',lb:'rgba(108,99,255,.35)',lc:'#c4b5fd',tags:['chat'],cost:'$0.006/1K tokens',cr:'~1 crédito',badge:'Texto',type:'text',isNew:false,
+    tip:'Pídele que redacte, revise, traduzca, analice o simplemente conversa.',
+    tpls:['Email de ventas','Post Instagram','Descripción producto','Plan de contenido'],
+    fmts:[{v:'Corto',s:'<300 palabras'},{v:'Medio',s:'300–600 pal.'},{v:'Largo',s:'>600 palabras'},{v:'Libre',s:'Sin límite'}],
+    stls:['Profesional','Casual','Creativo','Técnico'],
+    ei:'🤖',es:'Escribe tu instrucción y Claude responderá al instante',rt:'Generar texto',
+    exs:[{th:'📧',bg:'#1a1028',tt:'Email de ventas',ts:'Email persuasivo para curso online de fotografía digital'},{th:'📱',bg:'#0f2820',tt:'Post Instagram',ts:'5 ideas de posts para marca de ropa sustentable'},{th:'📝',bg:'#28100f',tt:'Descripción producto',ts:'Descripción para auriculares inalámbricos premium'},{th:'💡',bg:'#0f1828',tt:'Plan de contenido',ts:'Plan mensual para consultora de marketing digital'}],
+    rm:'<h2>Claude Sonnet 4.6</h2><p>El modelo más equilibrado de Anthropic. Potente, rápido y preciso.</p><h3>Ideal para</h3><p>Copywriting, emails, análisis, código, traducciones y asistencia general.</p><h3>Tips</h3><p>Sé específico sobre tono, audiencia y formato deseado. Más contexto = mejor resultado.</p><div class="rtip">Usa Claude Haiku para tareas simples y Sonnet para las complejas.</div>',
+    am:'claude-sonnet-4-6',ar:'{"success":true,"result":{"text":"Tu contenido generado aquí..."},"cost_charged":0.006}'},
+
+  {id:'claude-opus',name:'Claude Opus 4.7',pv:'Anthropic',pvs:'Anthropic',bg:'linear-gradient(135deg,#0f1528,#1a2850)',em:'💎',lb:'rgba(108,99,255,.35)',lc:'#c4b5fd',tags:['chat'],cost:'$0.010/1K tokens',cr:'~2 créditos',badge:'Texto',type:'text',isNew:true,
+    tip:'Para análisis profundos y razonamiento complejo de máxima calidad.',
+    tpls:['Análisis complejo','Estrategia negocio','Código avanzado','Investigación'],
+    fmts:[{v:'Detallado',s:'Análisis completo'},{v:'Ejecutivo',s:'Resumen clave'},{v:'Técnico',s:'Con código'},{v:'Libre',s:'Sin formato'}],
+    stls:['Analítico','Estratégico','Técnico','Académico'],
+    ei:'💎',es:'Claude Opus razona en profundidad. Para decisiones importantes.',rt:'Generar análisis',
+    exs:[{th:'📊',bg:'#0f1528',tt:'Análisis de mercado',ts:'FODA completo para startup de FinTech en Latam 2025'},{th:'🏗️',bg:'#1a2850',tt:'Arquitectura de sistema',ts:'Diseño microservicios para plataforma SaaS escalable'},{th:'⚖️',bg:'#0f2820',tt:'Due diligence',ts:'Análisis de riesgo para inversión en empresa de IA'},{th:'🎯',bg:'#28100f',tt:'Go-to-market',ts:'Estrategia GTM completa para lanzamiento producto B2B'}],
+    rm:'<h2>Claude Opus 4.7</h2><p>El modelo más poderoso de Anthropic. Para las tareas más complejas.</p><h3>Ideal para</h3><p>Análisis profundos, investigación, estrategia de negocio, código avanzado.</p><h3>Opus vs Sonnet</h3><p>Usa Sonnet para el 90% de tareas. Reserva Opus para cuando necesites máxima precisión.</p>',
+    am:'claude-opus-4-7',ar:'{"success":true,"result":{"text":"Análisis completo..."},"cost_charged":0.010}'},
+
+  {id:'gpt55',name:'GPT-5.5',pv:'OpenAI',pvs:'OpenAI',bg:'linear-gradient(135deg,#0f2020,#0a3a3a)',em:'⚡',lb:'rgba(0,212,170,.25)',lc:'#7fefda',tags:['chat'],cost:'$0.005/1K tokens',cr:'~1 crédito',badge:'Texto',type:'text',isNew:true,
+    tip:'El modelo flagship de OpenAI. Excelente para razonamiento y código.',
+    tpls:['Chatbot de soporte','Análisis de datos','Generador de código','Asistente virtual'],
+    fmts:[{v:'Chat',s:'Conversacional'},{v:'Informe',s:'Estructurado'},{v:'Código',s:'Con ejemplos'},{v:'Resumen',s:'Ejecutivo'}],
+    stls:['Conversacional','Analítico','Técnico','Conciso'],
+    ei:'⚡',es:'GPT-5.5 está listo para ayudarte con cualquier tarea.',rt:'Generar respuesta',
+    exs:[{th:'💻',bg:'#0f2020',tt:'Código Python',ts:'Script de automatización para extraer datos de Excel'},{th:'📊',bg:'#0a3a3a',tt:'Análisis de datos',ts:'Interpreta resultados de encuesta de 500 personas'},{th:'🤖',bg:'#1a1028',tt:'Chatbot FAQ',ts:'Crea respuestas automáticas para preguntas frecuentes'},{th:'✍️',bg:'#28100f',tt:'Reescritura',ts:'Mejora este párrafo para hacerlo más persuasivo'}],
+    rm:'<h2>GPT-5.5</h2><p>El modelo flagship de OpenAI con razonamiento avanzado y comprensión multimodal.</p><h3>Ideal para</h3><p>Chatbots, automatizaciones, análisis de datos, código y escritura creativa.</p>',
+    am:'gpt-5-5',ar:'{"success":true,"result":{"text":"Respuesta de GPT-5.5..."},"cost_charged":0.005}'},
+
+  {id:'gpt-image',name:'GPT Image 2.0',pv:'OpenAI',pvs:'OpenAI',bg:'linear-gradient(135deg,#1a280a,#283a0a)',em:'🎨',lb:'rgba(150,255,50,.18)',lc:'#c4ff7f',tags:['t2i','i2i'],cost:'$0.08/imagen',cr:'6 créditos',badge:'Imagen',type:'image',isNew:false,
+    tip:'Describe la imagen con detalle: sujeto, estilo, iluminación, colores y composición.',
+    tpls:['Foto de producto','Logo minimalista','Portada de redes','Arte digital'],
+    fmts:[{v:'Cuadrada',s:'1:1 · Instagram'},{v:'Panorámica',s:'16:9 · YouTube'},{v:'Vertical',s:'9:16 · Reels'},{v:'Retrato',s:'3:4 · Pinterest'}],
+    stls:['Fotorrealista','Artístico','Minimalista','3D Render'],
+    ei:'🎨',es:'Escribe tu instrucción y GPT Image 2 generará tu imagen',rt:'Crear imagen',
+    exs:[{th:'🛍️',bg:'#1a280a',tt:'Foto de producto',ts:'Zapatillas flotando sobre fondo blanco, iluminación de estudio, sombra suave'},{th:'🖌️',bg:'#0f2820',tt:'Arte digital',ts:'Dragón cyber en ciudad futurista, estilo anime, luces neón azul'},{th:'📸',bg:'#28100f',tt:'Retrato editorial',ts:'Retrato profesional con bokeh suave y luz natural de ventana'},{th:'🏠',bg:'#0f1828',tt:'Arquitectura',ts:'Casa moderna minimalista al atardecer con piscina infinita'}],
+    rm:'<h2>GPT Image 2.0</h2><p>El generador de imágenes de OpenAI. Fotorrealismo de alta calidad con edición por texto.</p><h3>Ideal para</h3><p>Fotos de producto, contenido de redes, ilustraciones de marketing, logos y banners.</p><h3>Tips</h3><p>Incluye: sujeto, estilo, iluminación, colores, fondo y composición. Más detalle = mejor resultado.</p>',
+    am:'gpt-image-2-0',ar:'{"success":true,"result":{"image_url":"https://cdn.kreaix.com/img/abc123.png"},"cost_charged":0.08}'},
+
+  {id:'flux',name:'Flux.1 Kontext',pv:'Black Forest Labs',pvs:'Black Forest',bg:'linear-gradient(135deg,#0a1a28,#0a2840)',em:'✨',lb:'rgba(0,120,255,.25)',lc:'#80c0ff',tags:['t2i','i2i','edit-i'],cost:'$0.08/imagen',cr:'6 créditos',badge:'Imagen',type:'image',isNew:false,
+    tip:'Flux es ideal para edición precisa de imágenes existentes con instrucciones en texto.',
+    tpls:['Editar fondo','Cambiar ropa','Añadir elemento','Cambiar estilo'],
+    fmts:[{v:'Cuadrada',s:'1:1'},{v:'Panorámica',s:'16:9'},{v:'Vertical',s:'9:16'},{v:'Original',s:'Mantener ratio'}],
+    stls:['Fotorrealista','Cinematográfico','Ilustración','Acuarela'],
+    ei:'✨',es:'Flux puede editar imágenes existentes o crear nuevas desde texto',rt:'Generar / Editar',
+    exs:[{th:'👕',bg:'#0a1a28',tt:'Cambiar ropa',ts:'Cambia la camiseta roja por una chaqueta de cuero negro'},{th:'🌅',bg:'#1a1028',tt:'Cambiar fondo',ts:'Reemplaza el fondo blanco por una playa al atardecer'},{th:'✂️',bg:'#0f2820',tt:'Remover objeto',ts:'Elimina el logo manteniendo el fondo intacto'},{th:'🎨',bg:'#28100f',tt:'Cambiar estilo',ts:'Convierte esta foto en ilustración tipo acuarela artística'}],
+    rm:'<h2>Flux.1 Kontext</h2><p>El modelo de imagen más preciso para edición. Modifica partes específicas con texto natural.</p><h3>Ideal para</h3><p>Edición de fotos de producto, cambio de fondos, modificación de ropa, retoque profesional.</p>',
+    am:'flux-1-kontext',ar:'{"success":true,"result":{"image_url":"https://cdn.kreaix.com/flux/abc123.png"},"cost_charged":0.08}'},
+
+  {id:'midjourney',name:'Midjourney V7',pv:'Midjourney',pvs:'Midjourney',bg:'linear-gradient(135deg,#281a0a,#3a280a)',em:'🖌️',lb:'rgba(255,180,50,.25)',lc:'#ffd47f',tags:['t2i'],cost:'$0.10/imagen',cr:'8 créditos',badge:'Imagen',type:'image',isNew:false,
+    tip:'Midjourney produce las imágenes más artísticas. Ideal para creativos y artistas.',
+    tpls:['Arte conceptual','Portada de libro','Diseño de personaje','Paisaje épico'],
+    fmts:[{v:'Cuadrada',s:'1:1'},{v:'Paisaje',s:'16:9'},{v:'Retrato',s:'2:3'},{v:'Panorámica',s:'21:9'}],
+    stls:['Fantasy','Sci-Fi','Realismo','Anime'],
+    ei:'🖌️',es:'Midjourney crea las imágenes más artísticas del mercado',rt:'Crear imagen',
+    exs:[{th:'🐉',bg:'#281a0a',tt:'Arte fantástico',ts:'Dragón dorado guardando castillo medieval en niebla'},{th:'🚀',bg:'#0f1828',tt:'Sci-Fi',ts:'Astronauta solitario en planeta alienígena con dos lunas'},{th:'🧝',bg:'#1a1028',tt:'Diseño de personaje',ts:'Elfa guerrera con armadura de plata y ojos brillantes'},{th:'🌌',bg:'#28100f',tt:'Paisaje épico',ts:'Ciudad flotante entre nubes doradas al atardecer'}],
+    rm:'<h2>Midjourney V7</h2><p>El modelo favorito de artistas. Produce imágenes artísticas con estilo visual único.</p><h3>Ideal para</h3><p>Arte conceptual, portadas, diseño de personajes, worldbuilding y proyectos creativos premium.</p>',
+    am:'midjourney-v7',ar:'{"success":true,"result":{"image_url":"https://cdn.kreaix.com/mj/abc123.png"},"cost_charged":0.10}'},
+
+  {id:'veo3',name:'Veo 3.1',pv:'Google',pvs:'Google',bg:'linear-gradient(135deg,#280f28,#451428)',em:'🎬',lb:'rgba(255,107,157,.25)',lc:'#ff9fd4',tags:['t2v','i2v'],cost:'$0.70/seg',cr:'70/seg',badge:'Video',type:'video',isNew:true,
+    tip:'Describe la escena: sujeto, acción, tipo de cámara, iluminación y duración.',
+    tpls:['Publicidad producto','Intro de canal','Escena natural','Clip musical'],
+    fmts:[{v:'3 segundos',s:'~210 créditos'},{v:'5 segundos',s:'~350 créditos'},{v:'8 segundos',s:'~560 créditos'},{v:'10 segundos',s:'~700 créditos'}],
+    stls:['Cinematográfico','Documental','Publicitario','Animado'],
+    ei:'🎬',es:'Veo 3.1 genera video de calidad cinematográfica con audio incluido',rt:'Generar video',
+    exs:[{th:'🌊',bg:'#280f28',tt:'Naturaleza',ts:'Olas del océano al atardecer en cámara lenta, cinematográfico'},{th:'🍕',bg:'#45140f',tt:'Food video',ts:'Pizza saliendo del horno con queso derritiéndose, toma macro'},{th:'🏙️',bg:'#0f1428',tt:'Ciudad futurista',ts:'Ciudad de noche con autos voladores y luces neón'},{th:'🧘',bg:'#0a280a',tt:'Meditación',ts:'Persona meditando en montaña al amanecer entre niebla'}],
+    rm:'<h2>Veo 3.1</h2><p>El modelo de video de Google. Hasta 10 segundos de calidad cinematográfica con audio.</p><h3>Ideal para</h3><p>Contenido para redes, intros de canal, videos publicitarios cortos.</p><h3>Tips</h3><p>Videos de 3-5s tienen mayor coherencia. Describe el tipo de cámara para mejor control.</p>',
+    am:'veo-3-1',ar:'{"success":true,"result":{"video_url":"https://cdn.kreaix.com/veo/abc123.mp4","duration":5},"cost_charged":3.50}'},
+
+  {id:'runway',name:'Runway Aleph',pv:'Runway',pvs:'Runway',bg:'linear-gradient(135deg,#1a1428,#2a1848)',em:'🚀',lb:'rgba(255,107,157,.25)',lc:'#ff9fd4',tags:['t2v','i2v','edit-v'],cost:'$0.80/seg',cr:'80/seg',badge:'Video',type:'video',isNew:false,
+    tip:'El estándar profesional. Especifica movimiento de cámara y estilo para resultados únicos.',
+    tpls:['Zoom cinematográfico','Paneo horizontal','Dolly shot','Cámara lenta'],
+    fmts:[{v:'4 segundos',s:'~320 créditos'},{v:'8 segundos',s:'~640 créditos'},{v:'16 segundos',s:'~1.280 créditos'},{v:'Custom',s:'hasta 40s'}],
+    stls:['Cinematográfico','Comercial','Artístico','Documental'],
+    ei:'🚀',es:'Runway ofrece el mayor control creativo para video IA profesional',rt:'Generar video',
+    exs:[{th:'🎥',bg:'#1a1428',tt:'Travelling shot',ts:'Cámara moviéndose por bosque en otoño, luz dorada'},{th:'🏄',bg:'#0f2820',tt:'Acción deportiva',ts:'Surfista en ola gigante, cámara lenta, spray de agua'},{th:'🌆',bg:'#280a14',tt:'Time lapse',ts:'Ciudad amaneciendo con nubes rápidas sobre rascacielos'},{th:'💃',bg:'#28100f',tt:'Fashion video',ts:'Modelo en pasarela con ropa de alta costura'}],
+    rm:'<h2>Runway Aleph</h2><p>El estándar profesional. Control total de cámara hasta 40 segundos.</p><h3>Ideal para</h3><p>Agencias creativas, productoras y anuncios de alta calidad.</p>',
+    am:'runway-aleph',ar:'{"success":true,"result":{"video_url":"https://cdn.kreaix.com/runway/abc123.mp4"},"cost_charged":6.40}'},
+
+  {id:'seedance',name:'Seedance 2.0',pv:'ByteDance',pvs:'ByteDance',bg:'linear-gradient(135deg,#14281a,#104028)',em:'💃',lb:'rgba(0,212,170,.18)',lc:'#7fefda',tags:['t2v','i2v'],cost:'$0.56/seg',cr:'56/seg',badge:'Video',type:'video',isNew:false,
+    tip:'Seedance es excelente para animaciones de personajes. Mejor precio/calidad del mercado.',
+    tpls:['Animación de personaje','Baile o movimiento','Clip de redes','Publicidad'],
+    fmts:[{v:'3 segundos',s:'~168 créditos'},{v:'5 segundos',s:'~280 créditos'},{v:'8 segundos',s:'~448 créditos'},{v:'10 segundos',s:'~560 créditos'}],
+    stls:['Realista','Animación','Cartoon','Cinemático'],
+    ei:'💃',es:'Seedance: el mejor modelo para animaciones y movimiento de personajes',rt:'Generar video',
+    exs:[{th:'🤸',bg:'#14281a',tt:'Movimiento de persona',ts:'Bailarina de ballet girando en escenario con luz de spot'},{th:'🐶',bg:'#104028',tt:'Animal animado',ts:'Cachorro golden retriever jugando en jardín con pelota'},{th:'🎭',bg:'#1a1028',tt:'Expresiones faciales',ts:'Actor dramatizando sorpresa frente a cámara, primer plano'},{th:'🎪',bg:'#0f2820',tt:'Escena animada',ts:'Personaje cartoon corriendo por ciudad colorida estilo Pixar'}],
+    rm:'<h2>Seedance 2.0</h2><p>Modelo de ByteDance especializado en animaciones fluidas. La mejor relación precio-calidad en video.</p><h3>Ideal para</h3><p>TikTok, Reels, animaciones de personajes, publicidad de bajo presupuesto.</p>',
+    am:'seedance-2-0',ar:'{"success":true,"result":{"video_url":"https://cdn.kreaix.com/seedance/abc123.mp4"},"cost_charged":2.80}'},
+
+  {id:'suno',name:'Suno V4.5 Plus',pv:'Suno',pvs:'Suno',bg:'linear-gradient(135deg,#1a280f,#283a14)',em:'🎵',lb:'rgba(150,255,80,.18)',lc:'#c4ff7f',tags:['t2m','a2a'],cost:'$0.10/canción',cr:'10 créditos',badge:'Música',type:'music',isNew:false,
+    tip:'Especifica género, tempo, idioma y ambiente. Suno crea canciones completas con letra y música.',
+    tpls:['Jingle de marca','Pop en español','Lo-fi instrumental','Canción motivacional'],
+    fmts:[{v:'Corta ~1 min',s:'10 créditos'},{v:'Normal ~2-3 min',s:'10 créditos'},{v:'Larga ~4 min',s:'10 créditos'},{v:'Instrumental',s:'Sin letra'}],
+    stls:['Pop','Rock','Lo-fi','Electrónica'],
+    ei:'🎵',es:'Describe tu canción y Suno la creará completa con letra y música',rt:'Crear canción',
+    exs:[{th:'🎸',bg:'#1a280f',tt:'Jingle comercial',ts:'Jingle alegre para app de delivery saludable, pop 30s'},{th:'🎹',bg:'#0f2820',tt:'Lo-fi para estudiar',ts:'Música lo-fi tranquila, piano y lluvia, sin letra'},{th:'🎤',bg:'#28100f',tt:'Canción motivacional',ts:'Pop motivacional en español sobre emprender y no rendirse'},{th:'🎶',bg:'#1a1428',tt:'Música para podcast',ts:'Cortina musical ambiental para podcast de meditación'}],
+    rm:'<h2>Suno V4.5 Plus</h2><p>El modelo de música más avanzado. Canciones completas con letra y música desde texto.</p><h3>Ideal para</h3><p>Jingles, música para videos, podcasts, canciones personalizadas.</p><h3>Tips</h3><p>Incluye género, tempo, idioma, emoción e instrumentos clave.</p>',
+    am:'suno-v4-5',ar:'{"success":true,"result":{"audio_url":"https://cdn.kreaix.com/suno/abc123.mp3","duration":165},"cost_charged":0.10}'},
+
+  {id:'elevenlabs',name:'ElevenLabs v3',pv:'ElevenLabs',pvs:'ElevenLabs',bg:'linear-gradient(135deg,#281428,#3a1440)',em:'🎙️',lb:'rgba(200,100,255,.25)',lc:'#e0a0ff',tags:['tts','s2t'],cost:'$0.60/min',cr:'60/min',badge:'Voz',type:'audio',isNew:false,
+    tip:'La voz IA más natural. Escribe el texto y ElevenLabs lo convierte en narración profesional.',
+    tpls:['Narración de video','Intro de podcast','Doblaje a español','Audiobook'],
+    fmts:[{v:'Corto <1 min',s:'~60 créditos'},{v:'Medio 1-5 min',s:'60-300 créditos'},{v:'Largo 5-30 min',s:'300+ créditos'},{v:'Batch',s:'Múltiples archivos'}],
+    stls:['Natural','Dramático','Narrador','Noticias'],
+    ei:'🎙️',es:'Escribe el texto que quieres convertir a voz',rt:'Generar voz',
+    exs:[{th:'📺',bg:'#281428',tt:'Narración de video',ts:'Narra en voz masculina profesional este guion de 2 minutos'},{th:'🎧',bg:'#3a1440',tt:'Intro de podcast',ts:'Intro energética para podcast de tecnología e innovación'},{th:'🌍',bg:'#1a1028',tt:'Doblaje',ts:'Dobla este texto del inglés al español con acento neutral'},{th:'📚',bg:'#0f2820',tt:'Audiobook',ts:'Narra el primer capítulo de esta historia de ficción'}],
+    rm:'<h2>ElevenLabs v3</h2><p>La voz IA más realista del mercado. Soporte de más de 30 idiomas.</p><h3>Ideal para</h3><p>Videos de YouTube, podcasts, doblaje, audiobooks y asistentes de voz.</p>',
+    am:'elevenlabs-v3',ar:'{"success":true,"result":{"audio_url":"https://cdn.kreaix.com/tts/abc123.mp3","duration":120},"cost_charged":1.20}'},
+];
+
+// ── STATE ──
+let curModel = MD[3]; // gpt-image por defecto
+let curFilter = 'all';
+let isRunning = false;
+
+// ── TAG HELPERS ──
+function tclass(t){return{chat:'tc',t2v:'tv',i2v:'tv','edit-v':'te',t2i:'ti',i2i:'ti','edit-i':'te',t2m:'tm',tts:'ta',s2t:'ta',a2a:'ta',v2v:'tv',s2v:'tv',lip:'tv'}[t]||'tc'}
+function tlbl(t){return{chat:'Chat',t2v:'Text→Video',i2v:'Img→Video','edit-v':'Video Edit',t2i:'Text→Imagen',i2i:'Img→Imagen','edit-i':'Image Edit',t2m:'Text→Música',tts:'Text→Voz',s2t:'Voz→Text',a2a:'Audio→Audio',v2v:'Video→Video',s2v:'Speech→Video',lip:'Lip Sync'}[t]||t}
+function bbg(type){return{text:'rgba(108,99,255,.15)',image:'rgba(0,212,170,.15)',video:'rgba(255,107,157,.15)',music:'rgba(255,209,102,.15)',audio:'rgba(255,180,50,.15)'}[type]||'rgba(108,99,255,.15)'}
+function bfc(type){return{text:'#a89fff',image:'#00d4aa',video:'#ff6b9d',music:'#ffd166',audio:'#ffc97f'}[type]||'#a89fff'}
+
+// ── BUILD GRID ──
+function buildGrid(){
+  document.getElementById('mg').innerHTML = MD.map(m=>`
+    <div class="mc" data-tags="${m.tags.join(' ')}" data-name="${m.name.toLowerCase()}" onclick="openPG('${m.id}')">
+      <div class="mth" style="background:${m.bg}">
+        <div class="me">${m.em}</div>
+        <div class="mg2"></div>
+        <div class="mp" style="background:${m.lb};color:${m.lc}">${m.pvs}</div>
+        <div class="mn">${m.name}</div>
+        ${m.isNew?'<div class="newp">NEW</div>':''}
+      </div>
+      <div class="mi">
+        <div class="mtags">${m.tags.map(t=>`<span class="mt ${tclass(t)}">${tlbl(t)}</span>`).join('')}</div>
+        <div class="mf"><span class="mco">desde <strong>${m.cost}</strong></span><button class="ub" onclick="event.stopPropagation();openPG('${m.id}')">Usar →</button></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── FILTERS ──
+function fc2(cat,btn){
+  curFilter=cat;
+  document.querySelectorAll('.fp').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  af();
+}
+function af(){
+  const q=document.getElementById('si').value.toLowerCase();
+  document.querySelectorAll('.mc').forEach(c=>{
+    const t=c.dataset.tags,n=c.dataset.name;
+    c.style.display=(curFilter==='all'||t.includes(curFilter))&&(!q||n.includes(q)||t.includes(q))?'':'none';
+  });
+}
+
+// ── NAVIGATION ──
+const STIT={market:'Models Market',precios:'Precios',pagos:'Administración de pagos',usage:'API Usage',registros:'Registros de uso',afiliados:'Programa de Afiliados',claves:'Claves API'};
+function gos(name){
+  document.querySelectorAll('[id^="s-"]').forEach(s=>s.style.display='none');
+  const el=document.getElementById('s-'+name);
+  if(el)el.style.display=name==='market'?'flex':'block';
+  document.querySelectorAll('.ni[data-sec]').forEach(i=>i.classList.remove('active'));
+  const ni=document.querySelector(`.ni[data-sec="${name}"]`);
+  if(ni)ni.classList.add('active');
+  document.getElementById('tt').textContent=STIT[name]||name;
+}
+document.querySelectorAll('.ni[data-sec]').forEach(el=>el.addEventListener('click',()=>gos(el.dataset.sec)));
+
+// ── OPEN PLAYGROUND ──
+function openPG(id){
+  const m=MD.find(x=>x.id===id)||MD[3];
+  curModel=m;
+  document.getElementById('pgn').textContent=m.name;
+  document.getElementById('pgs').textContent=m.pv+' · '+tlbl(m.tags[0]);
+  document.getElementById('pbn').textContent=m.name;
+  document.getElementById('pbs').textContent=m.tags.map(tlbl).join(' · ');
+  document.getElementById('pbc').textContent=m.cost;
+  document.getElementById('ptip').textContent=m.tip;
+  document.getElementById('pcd').textContent=m.cost.split('/')[0]+' USD';
+  document.getElementById('prc').textContent=m.cr;
+  document.getElementById('prt').textContent=m.rt;
+  document.getElementById('pei').textContent=m.ei;
+  document.getElementById('pes').textContent=m.es;
+  const ob=document.getElementById('pob');
+  ob.textContent=m.badge;ob.style.background=bbg(m.type);ob.style.color=bfc(m.type);
+  document.getElementById('ptpls').innerHTML=m.tpls.map(t=>`<button class="tp" onclick="atpl(this)">${t}</button>`).join('');
+  document.getElementById('pfg').innerHTML=m.fmts.map((f,i)=>`<div class="fb${i===0?' sel':''}" onclick="fsel(this)"><div class="fbl">Opción</div><div class="fbv">${f.v}</div><div class="fbs">${f.s}</div></div>`).join('');
+  document.getElementById('psg').innerHTML=m.stls.map((s,i)=>`<button class="sgb${i===0?' active':''}" onclick="sgsel(this)">${s}</button>`).join('');
+  document.getElementById('pex').innerHTML=m.exs.map(e=>`<div class="exc" onclick="lex(this)"><div class="ext" style="background:${e.bg}">${e.th}</div><div class="extt">${e.tt}</div><div class="exts">${e.ts}</div></div>`).join('');
+  document.getElementById('prm').innerHTML=m.rm;
+  document.getElementById('pac').innerHTML=`<button class="cpc" onclick="cpc2('pac',this)">Copiar</button><span class="cp">curl</span> https://api.kreaix.com/v1/generate \\\n  <span class="cm">-H</span> <span class="cg">"Authorization: Bearer nxs_sk_..."</span> \\\n  <span class="cm">-H</span> <span class="cg">"Content-Type: application/json"</span> \\\n  <span class="cm">-d</span> <span class="cy">'{"model":"${m.am}","prompt":"Tu instrucción"}'</span>`;
+  document.getElementById('par').innerHTML=`<span class="cg">${m.ar}</span>`;
+  ro();
+  document.getElementById('pp').value='';
+  document.getElementById('pcc').textContent='0 caracteres';
+  pt('play',document.querySelector('.pgtab'));
+  sm('simple');
+  document.getElementById('pgo').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function cpg(){document.getElementById('pgo').classList.remove('open');document.body.style.overflow='';}
+
+// ── PG TABS ──
+function pt(name,btn){
+  const map={play:'t-play',ex:'t-ex',rm:'t-rm',ap:'t-ap'};
+  Object.values(map).forEach(id=>{const e=document.getElementById(id);if(e){e.style.display='none';e.style.flex='';}});
+  const t=document.getElementById(map[name]);
+  if(t){t.style.display=name==='play'?'flex':'block';if(name==='play')t.style.flex='1';}
+  document.querySelectorAll('.pgtab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');else document.querySelector('.pgtab').classList.add('active');
+}
+
+// ── MODES ──
+function sm(m){
+  document.querySelectorAll('.mb').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mb')[m==='simple'?0:1].classList.add('active');
+  document.getElementById('smc').style.display=m==='simple'?'block':'none';
+  document.getElementById('sop').style.display=m==='simple'?'block':'none';
+  document.getElementById('adop').style.display=m==='adv'?'block':'none';
+}
+
+// ── HELPERS ──
+function sgsel(btn){const p=btn.closest('.sg');if(p)p.querySelectorAll('.sgb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function fsel(box){document.querySelectorAll('.fb').forEach(b=>b.classList.remove('sel'));box.classList.add('sel');}
+function sp(c){document.querySelectorAll('.pkc').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');}
+function vm(v,btn){document.querySelectorAll('.vb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function cpc2(id,btn){const t=document.getElementById(id).innerText.replace('Copiar','').trim();navigator.clipboard.writeText(t).then(()=>{btn.textContent='✅';setTimeout(()=>btn.textContent='Copiar',2000);});}
+function atpl(btn){
+  const prompts={
+    'Email de ventas':'Escribe un email de ventas persuasivo para mi curso online de fotografía digital para principiantes. Tono amigable pero profesional. Incluye asunto y CTA claro.',
+    'Post Instagram':'Crea 5 ideas de posts para una marca de ropa sustentable. Incluye caption completo y hashtags relevantes.',
+    'Descripción producto':'Descripción atractiva y persuasiva para auriculares inalámbricos premium con cancelación de ruido activa. Para e-commerce.',
+    'Plan de contenido':'Plan de contenido para redes sociales de consultora de marketing. 4 semanas, 3 posts semanales, variedad de formatos.',
+    'Análisis complejo':'Análisis FODA completo de la industria del e-commerce en Chile para 2025, con oportunidades para pequeñas empresas.',
+    'Estrategia negocio':'Estrategia go-to-market para lanzar plataforma SaaS de gestión de inventarios para restaurantes en México.',
+    'Código avanzado':'API REST en Node.js con Express para gestión de usuarios. Incluye auth JWT, validación con Joi y manejo de errores.',
+    'Investigación':'Tendencias de IA para 2025-2026 enfocadas en aplicaciones empresariales en Latinoamérica.',
+    'Chatbot de soporte':'20 pares pregunta-respuesta para chatbot de soporte de tienda de ropa online. Tono amigable y resolutivo.',
+    'Análisis de datos':'Analiza datos de ventas mensuales y proporciona insights clave, tendencias y 3 recomendaciones accionables.',
+    'Generador de código':'Componente React completo para formulario de contacto con validación en tiempo real y manejo de errores.',
+    'Asistente virtual':'Flujo de conversación completo para asistente virtual de reservas de restaurante.',
+    'Foto de producto':'Fotografía de zapatillas de running sobre fondo blanco limpio. Iluminación de estudio suave, sombra difusa, perspectiva 3/4.',
+    'Logo minimalista':'Logo minimalista para marca de café artesanal "Origen". Paleta marrón y beige, tipografía sans-serif elegante.',
+    'Portada de redes':'Portada para canal YouTube de tecnología y IA. Fondo oscuro, elementos tech, azul eléctrico y blanco.',
+    'Arte digital':'Ciudad flotante entre nubes al atardecer, arquitectura fantástica, colores dorados y rosas, estilo pintura digital.',
+    'Editar fondo':'Tengo foto de botella de perfume sobre fondo gris. Cambia el fondo por mármol blanco con flores blancas.',
+    'Cambiar ropa':'Cambia la camiseta roja por una chaqueta de cuero negro sin alterar posición ni iluminación.',
+    'Añadir elemento':'Añade aureola dorada brillante sobre el personaje. Debe verse integrada con la iluminación existente.',
+    'Cambiar estilo':'Convierte esta fotografía realista en ilustración tipo acuarela artística con colores suaves.',
+    'Arte conceptual':'Nave espacial de exploración humana en órbita sobre planeta alienígena verde y azul, detalle técnico realista.',
+    'Portada de libro':'Portada de thriller psicológico "El Último Testigo". Paleta oscura, figura en niebla, tipografía elegante.',
+    'Diseño de personaje':'Guerrera medieval de 28 años, armadura plateada con detalles élfico, pelo rojo, mirada determinada, concept art.',
+    'Paisaje épico':'Bosque encantado con árboles luminiscentes azules y violetas, criaturas mágicas volando entre ramas.',
+    'Publicidad producto':'Producto rotando sobre fondo dorado degradado, iluminación dramática, partículas brillantes, estilo lujo premium.',
+    'Intro de canal':'Intro cinematográfico para canal de cocina YouTube, 5 segundos, logo con vapor de comida, colores cálidos.',
+    'Escena natural':'Cascada en bosque tropical al amanecer, niebla suave, luz dorada filtrándose, cámara lenta cinematográfica.',
+    'Clip musical':'Cantante en escenario futurista de noche, lluvia, luces LED coloridas, cámara girando, estilo music video.',
+    'Zoom cinematográfico':'Zoom lento hacia persona pensativa en ventana lluviosa, profundidad de campo reducida, luz dramática.',
+    'Paneo horizontal':'Paneo de paisaje montañoso nevado al amanecer, cielo con auroras rosadas, cámara a nivel del suelo.',
+    'Dolly shot':'Dolly shot hacia mesa de café con taza humeante y libro abierto, luz natural cálida de mañana.',
+    'Cámara lenta':'Taza de café vertiéndose en ultra cámara lenta, salpicaduras formando patrones, fondo oscuro elegante.',
+    'Animación de personaje':'Mujer de 25 años caminando confiada hacia cámara en ciudad moderna, estilo semi-realista, ropa casual.',
+    'Baile o movimiento':'Pareja bailando salsa en pista iluminada con luces de colores, movimientos fluidos y energéticos.',
+    'Clip de redes':'Creator hablando a cámara entusiasta sobre un producto, encuadre para TikTok vertical, fondo limpio.',
+    'Publicidad':'Bebida energética siendo abierta, explosión de burbujas y color, estilo publicidad premium.',
+    'Jingle de marca':'Jingle alegre y pegajoso para app de delivery saludable, pop energético, 30 segundos, en español.',
+    'Pop en español':'Canción pop en español sobre el verano en la playa con amigos. Ritmo alegre, coro pegajoso, positivo.',
+    'Lo-fi instrumental':'Música lo-fi tranquila para concentración. Piano suave, lluvia de fondo, sin letra, ritmo lento.',
+    'Canción motivacional':'Canción motivacional en español para emprendedores. Pop-rock con mensaje poderoso, coro épico.',
+    'Narración de video':'[Escribe aquí el texto que deseas narrar. ElevenLabs lo convertirá en voz natural de alta calidad.]',
+    'Intro de podcast':'Guion de introducción para podcast "IA Sin Filtros" sobre impacto de la IA en el trabajo. 2 minutos.',
+    'Doblaje a español':'[Ingresa el texto en inglés que deseas doblar al español con acento neutro latinoamericano]',
+    'Audiobook':'[Ingresa el texto del capítulo que deseas narrar como audiobook. Máximo 5.000 caracteres.]',
+  };
+  document.getElementById('pp').value=prompts[btn.textContent]||btn.textContent;
+  document.getElementById('pcc').textContent=document.getElementById('pp').value.length+' caracteres';
+}
+function lex(card){
+  const ts=card.querySelector('.exts').textContent;
+  document.getElementById('pp').value=ts;
+  document.getElementById('pcc').textContent=ts.length+' caracteres';
+  pt('play',document.querySelector('.pgtab'));
+}
+function ro(){
+  document.getElementById('pob2').innerHTML=`<div class="es"><div class="ei">${curModel.ei}</div><div class="ett">Listo para crear</div><div class="esb">${curModel.es}</div></div>`;
+}
+
+// ── RUN ──
+async function pgrun(){
+  const prompt=document.getElementById('pp').value.trim();
+  if(!prompt){
+    const ta=document.getElementById('pp');
+    ta.style.borderColor='#ff6b9d';
+    ta.placeholder='⚠️ Escribe una instrucción primero...';
+    setTimeout(()=>{ta.style.borderColor='';ta.placeholder='Describe lo que quieres crear...';},2500);
+    return;
+  }
+  if(isRunning)return;
+  isRunning=true;
+  const btn=document.getElementById('prb');
+  btn.classList.add('ld');
+  document.getElementById('pri').textContent='⏳';
+  document.getElementById('prt').textContent='Generando...';
+  document.getElementById('prc').textContent='';
+  document.getElementById('pob2').innerHTML=`<div class="lds"><div class="ldd"><div class="dt"></div><div class="dt"></div><div class="dt"></div></div><div class="ldt">Generando con ${curModel.name}...</div></div>`;
+
+  const type=curModel.type;
+  const delay={video:4000,music:3000,audio:3000}[type]||1800;
+
+  if(type==='text'){
+    try{
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+      const d=await r.json();
+      const txt=d.content?.[0]?.text||'No se pudo generar respuesta.';
+      showRes(txt,prompt);
+    }catch(e){setTimeout(()=>showRes(null,prompt),delay);}
+  }else{
+    setTimeout(()=>showRes(null,prompt),delay);
+  }
+}
+
+function showRes(text,prompt){
+  isRunning=false;
+  const btn=document.getElementById('prb');
+  btn.classList.remove('ld');
+  document.getElementById('pri').textContent='⚡';
+  document.getElementById('prt').textContent=curModel.rt;
+  document.getElementById('prc').textContent=curModel.cr;
+  const ob=document.getElementById('pob2');
+  const t=curModel.type;
+  let h='';
+  if(t==='text'&&text){
+    h=`<div class="rc"><div class="rch2">✨ ${curModel.name} · Resultado</div><div class="rcb"><div class="rt">${text}</div><div class="rac"><button class="ra rs" onclick="cptxt(this)">📋 Copiar</button><button class="ra rg" onclick="pgrun()">🔄 Regenerar</button><button class="ra rg">⬇️ .txt</button></div></div></div>`;
+  }else if(t==='image'){
+    h=`<div class="rc"><div class="rch2">🎨 Imagen generada · ${curModel.name} · ${curModel.cost}</div><div class="rcb"><div style="width:100%;height:280px;background:linear-gradient(135deg,#1a1028,#0f2820,#280f28);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;margin-bottom:14px"><div style="font-size:52px">🎨</div><div style="font-size:12px;color:var(--mu);text-align:center;padding:0 20px">"${prompt.substring(0,70)}${prompt.length>70?'...':''}"</div><div style="font-size:11px;color:rgba(108,99,255,.4)">[ Tu imagen aquí en producción ]</div></div><div class="rac"><button class="ra rs">⬇️ Descargar PNG</button><button class="ra rg" onclick="pgrun()">🔄 Regenerar</button><button class="ra rg">↗️ Compartir</button></div></div></div>`;
+  }else if(t==='video'){
+    h=`<div class="rc"><div class="rch2">🎬 Video generado · ${curModel.name}</div><div class="rcb"><div style="width:100%;height:220px;background:linear-gradient(135deg,#280f28,#0f1428);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;margin-bottom:14px;position:relative"><div style="font-size:44px">🎬</div><div style="font-size:11px;color:var(--mu);text-align:center;padding:0 20px">"${prompt.substring(0,65)}${prompt.length>65?'...':''}"</div><div style="position:absolute;bottom:10px;left:10px;font-size:10px;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:4px;color:#ccc">00:05 · 1080p · Con audio</div></div><div class="rac"><button class="ra rs">⬇️ Descargar MP4</button><button class="ra rg" onclick="pgrun()">🔄 Regenerar</button><button class="ra rg">↗️ Compartir</button></div></div></div>`;
+  }else if(t==='music'||t==='audio'){
+    h=`<div class="rc"><div class="rch2">🎵 Audio generado · ${curModel.name}</div><div class="rcb"><div style="background:linear-gradient(135deg,#1a280f,#141a28);border-radius:10px;padding:20px;margin-bottom:14px"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:46px;height:46px;background:linear-gradient(135deg,#ffd166,#6c63ff);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🎵</div><div><div style="font-size:14px;font-weight:600">Audio generado</div><div style="font-size:11px;color:var(--mu)">${curModel.name} · ~2:45 min</div></div></div><div style="background:rgba(255,255,255,.05);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px"><button style="width:30px;height:30px;border-radius:50%;background:#6c63ff;border:none;color:#fff;cursor:pointer;font-size:13px">▷</button><div style="flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px"><div style="width:0;height:100%;background:#6c63ff;border-radius:2px"></div></div><span style="font-size:11px;color:var(--mu)">2:45</span></div></div><div class="rac"><button class="ra rs">⬇️ Descargar MP3</button><button class="ra rg" onclick="pgrun()">🔄 Regenerar</button><button class="ra rg">↗️ Compartir</button></div></div></div>`;
+  }else{
+    h=`<div class="rc"><div class="rch2">⚠️ Error</div><div class="rcb"><div class="rt">No se pudo conectar. Verifica tu saldo e inténtalo de nuevo.</div></div></div>`;
+  }
+  ob.innerHTML=h;
+}
+
+function cptxt(btn){
+  const t=document.querySelector('.rt')?.textContent||'';
+  navigator.clipboard.writeText(t).then(()=>{btn.textContent='✅ Copiado';setTimeout(()=>btn.textContent='📋 Copiar',2000);});
+}
+
+
+// ── THEME ──
+const TK='kreaix_theme';
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  const b=document.getElementById('ttbtn');
+  if(b)b.textContent=t==='dark'?'🌙':'☀️';
+  localStorage.setItem(TK,t);
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+applyTheme(localStorage.getItem(TK)||'dark');
+
+// ── KEYBOARD & INIT ──
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cpg();});
+buildGrid();
+</script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión — Kreaix</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+[data-theme="light"]{
+  --bg:#f4f4fc;--surface:#eeeef8;--card:#ffffff;--bd:rgba(0,0,0,.09);
+  --tx:#12121e;--mu:#8080a8;--mu2:#50507a;
+}
+*{font-style:normal!important;-webkit-font-smoothing:antialiased}
+body{transition:background .3s,color .3s}
+.ttoggle{position:fixed;top:20px;right:20px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .22s;z-index:100}
+.ttoggle:hover{background:rgba(108,99,255,.15);border-color:#6c63ff}
+:root,[data-theme="dark"]{
+  --bg:#0a0a14;--surface:#0f0f1e;--card:#13132a;
+  --bd:rgba(255,255,255,0.07);--bd2:rgba(108,99,255,0.35);
+  --ac:#6c63ff;--ac2:#ff6b9d;--ac3:#00d4aa;
+  --tx:#e8e8f8;--mu:#6060a0;--mu2:#9090c0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;display:flex;min-height:100vh;overflow:hidden}
+
+/* ── LEFT PANEL ── */
+.left{
+  width:52%;min-height:100vh;position:relative;
+  background:var(--surface);border-right:1px solid var(--bd);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
+}
+
+/* animated grid bg */
+.grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(108,99,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(108,99,255,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  animation:gridshift 20s linear infinite;
+}
+@keyframes gridshift{from{background-position:0 0}to{background-position:48px 48px}}
+
+/* glow orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:pulse2 6s ease-in-out infinite}
+.orb1{width:420px;height:420px;background:rgba(108,99,255,0.12);top:-100px;left:-80px;animation-delay:0s}
+.orb2{width:300px;height:300px;background:rgba(255,107,157,0.08);bottom:-60px;right:-40px;animation-delay:3s}
+@keyframes pulse2{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+
+.left-inner{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:36px 48px}
+.left-logo{display:flex;align-items:center;gap:10px;margin-bottom:auto}
+.lm{width:32px;height:32px;background:linear-gradient(135deg,#6c63ff,#ff6b9d);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;font-family:'Inter',sans-serif}
+.lt{font-family:'Inter',sans-serif;font-weight:800;font-size:18px}.lt span{color:#6c63ff}
+
+.left-content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+.left-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.2);border-radius:100px;padding:6px 16px;font-size:12px;color:#a89fff;margin-bottom:28px;width:fit-content}
+.tag-dot{width:6px;height:6px;background:#6c63ff;border-radius:50%;animation:blink2 2s infinite}
+@keyframes blink2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+.left-title{font-family:'Inter',sans-serif;font-size:clamp(32px,4vw,48px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:20px}
+.left-title .g{background:linear-gradient(135deg,#6c63ff,#ff6b9d,#ffd166);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.left-sub{font-size:16px;color:var(--mu2);line-height:1.65;max-width:380px;margin-bottom:44px;font-weight:300}
+
+/* feature list */
+.features{display:flex;flex-direction:column;gap:14px}
+.feat{display:flex;align-items:center;gap:14px}
+.feat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.feat-text{font-size:14px;color:var(--mu2);line-height:1.4}
+.feat-text strong{color:var(--tx);font-weight:500}
+
+/* testimonial */
+.testi{margin-top:48px;background:rgba(255,255,255,0.03);border:1px solid var(--bd);border-radius:16px;padding:20px 22px}
+.testi-text{font-size:14px;color:var(--mu2);line-height:1.65;font-style:italic;margin-bottom:14px}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#ff6b9d);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.testi-name{font-size:13px;font-weight:500}
+.testi-role{font-size:11px;color:var(--mu)}
+.stars{color:#ffd166;font-size:12px;margin-bottom:10px;letter-spacing:1px}
+
+.left-footer{font-size:12px;color:var(--mu);margin-top:auto;padding-top:32px}
+
+/* ── RIGHT PANEL ── */
+.right{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:40px 32px;overflow-y:auto;
+}
+.form-card{width:100%;max-width:420px}
+
+.form-header{margin-bottom:32px}
+.form-eyebrow{font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.form-title{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.form-sub{font-size:14px;color:var(--mu2)}.form-sub a{color:#6c63ff;text-decoration:none;font-weight:500}.form-sub a:hover{text-decoration:underline}
+
+/* google btn */
+.google-btn{
+  width:100%;padding:13px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--bd);
+  border-radius:12px;color:var(--tx);font-size:14px;font-weight:500;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all .2s;margin-bottom:20px;
+}
+.google-btn:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.15);transform:translateY(-1px)}
+.google-icon{width:18px;height:18px;flex-shrink:0}
+
+.divider{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.divider-line{flex:1;height:1px;background:var(--bd)}
+.divider-text{font-size:12px;color:var(--mu);white-space:nowrap}
+
+/* form fields */
+.field{margin-bottom:16px;position:relative}
+.field-label{font-size:12px;font-weight:600;color:var(--mu2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.field-wrap{position:relative}
+.field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.5;pointer-events:none;z-index:1}
+.field-input{
+  width:100%;padding:13px 14px 13px 42px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--bd);
+  border-radius:11px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;
+  outline:none;transition:all .2s;
+}
+.field-input:focus{border-color:var(--ac);background:rgba(108,99,255,0.05);box-shadow:0 0 0 3px rgba(108,99,255,0.1)}
+.field-input::placeholder{color:var(--mu)}
+.field-input.err{border-color:#ff6b9d;background:rgba(255,107,157,0.05)}
+.field-input.ok{border-color:#00d4aa}
+.field-msg{font-size:11px;margin-top:5px;min-height:16px;display:block;transition:all .2s}
+.field-msg.err{color:#ff9fd4}.field-msg.ok{color:#00d4aa}
+
+/* password toggle */
+.pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mu);cursor:pointer;font-size:15px;padding:4px;transition:color .18s;z-index:1}
+.pwd-toggle:hover{color:var(--tx)}
+
+/* remember + forgot */
+.row-opts{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.checkbox-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
+.checkbox-wrap input{display:none}
+.checkbox-box{width:16px;height:16px;border-radius:4px;border:1px solid var(--bd);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
+.checkbox-wrap input:checked+.checkbox-box{background:#6c63ff;border-color:#6c63ff}
+.checkbox-wrap input:checked+.checkbox-box::after{content:'✓';font-size:10px;font-weight:700;color:#fff}
+.checkbox-lbl{font-size:13px;color:var(--mu2)}
+.forgot-link{font-size:13px;color:#6c63ff;text-decoration:none;font-weight:500;transition:opacity .18s}
+.forgot-link:hover{opacity:.7}
+
+/* submit btn */
+.submit-btn{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#6c63ff,#7c6bff);
+  border:none;border-radius:12px;color:#fff;
+  font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .22s;position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(108,99,255,0.3);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent);pointer-events:none}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(108,99,255,0.45)}
+.submit-btn:active{transform:translateY(0);box-shadow:0 4px 16px rgba(108,99,255,0.25)}
+.submit-btn.loading{opacity:.7;cursor:not-allowed;transform:none}
+.submit-btn.loading .btn-text::after{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-left:8px;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* error banner */
+.err-banner{display:none;background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.25);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#ff9fd4;align-items:center;gap:10px}
+.err-banner.show{display:flex}
+
+/* success */
+.success-state{display:none;text-align:center;padding:20px 0}
+.success-state.show{display:block}
+.success-icon{font-size:56px;margin-bottom:16px;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--mu2);line-height:1.6;margin-bottom:24px}
+
+.terms{font-size:11px;color:var(--mu);text-align:center;margin-top:20px;line-height:1.6}
+.terms a{color:var(--mu2);text-decoration:none}.terms a:hover{color:var(--tx)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .left{display:none}
+  .right{padding:32px 20px}
+  .form-card{max-width:100%}
+}
+</style>
+</head>
+<body>
+<button class="ttoggle" id="ttbtn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+
+
+<!-- LEFT PANEL -->
+<div class="left">
+  <div class="grid-bg"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="left-inner">
+    <div class="left-logo">
+      <div class="lm">N</div>
+      <div class="lt">Krea<span>ix</span></div>
+    </div>
+
+    <div class="left-content">
+      <div class="left-tag"><span class="tag-dot"></span>+20 modelos de IA disponibles ahora</div>
+      <h1 class="left-title">Toda la IA<br>en <span class="g">un solo lugar</span></h1>
+      <p class="left-sub">Crea texto, imágenes, videos y música con los mejores modelos del mundo. Sin complicaciones. Solo pagas lo que usas.</p>
+
+      <div class="features">
+        <div class="feat">
+          <div class="feat-icon" style="background:rgba(108,99,255,.12)">🤖</div>
+          <div class="feat-text"><strong>Claude, GPT-5.5, Gemini</strong> — Chat y texto de máxima calidad</div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon" style="background:rgba(0,212,170,.1)">🎨</div>
+          <div class="feat-text"><strong>GPT Image, Flux, Midjourney</strong> — Imágenes fotorrealistas y artísticas</div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon" style="background:rgba(255,107,157,.1)">🎬</div>
+          <div class="feat-text"><strong>Veo 3.1, Runway, Seedance</strong> — Video cinematográfico con audio</div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon" style="background:rgba(255,209,102,.1)">🎵</div>
+          <div class="feat-text"><strong>Suno, ElevenLabs</strong> — Música y voz de calidad profesional</div>
+        </div>
+      </div>
+
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <div class="testi-text">"Por fin puedo usar Claude, Midjourney y Suno sin pagar 5 suscripciones distintas. Kreaix me ahorra más de $100 al mes."</div>
+        <div class="testi-author">
+          <div class="testi-av">C</div>
+          <div><div class="testi-name">Carlos Ruiz</div><div class="testi-role">Creador de contenido · México</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">© 2025 Kreaix — Hecho con ♥ en Latinoamérica</div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+  <div class="form-card">
+
+    <!-- FORM STATE -->
+    <div id="formState">
+      <div class="form-header">
+        <div class="form-eyebrow">Bienvenido de vuelta</div>
+        <h2 class="form-title">Iniciar sesión</h2>
+        <p class="form-sub">¿No tienes cuenta? <a href="register.html">Crear cuenta gratis →</a></p>
+      </div>
+
+      <!-- GOOGLE -->
+      <button class="google-btn" onclick="handleGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Continuar con Google
+      </button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">o ingresa con tu email</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- ERROR BANNER -->
+      <div class="err-banner" id="errBanner">
+        <span>⚠️</span><span id="errMsg">Credenciales incorrectas. Verifica tu email y contraseña.</span>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="field">
+        <label class="field-label" for="email">Correo electrónico</label>
+        <div class="field-wrap">
+          <span class="field-icon">✉️</span>
+          <input type="email" id="email" class="field-input" placeholder="tu@email.com"
+            oninput="validateEmail(this)" onblur="validateEmailBlur(this)" autocomplete="email">
+        </div>
+        <span class="field-msg" id="emailMsg"></span>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="field">
+        <label class="field-label" for="password">Contraseña</label>
+        <div class="field-wrap">
+          <span class="field-icon">🔒</span>
+          <input type="password" id="password" class="field-input" placeholder="Tu contraseña"
+            oninput="validatePwd(this)" onkeydown="if(event.key==='Enter')submitLogin()" autocomplete="current-password">
+          <button class="pwd-toggle" type="button" onclick="togglePwd('password',this)" tabindex="-1">👁️</button>
+        </div>
+        <span class="field-msg" id="pwdMsg"></span>
+      </div>
+
+      <!-- REMEMBER + FORGOT -->
+      <div class="row-opts">
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="remember">
+          <div class="checkbox-box"></div>
+          <span class="checkbox-lbl">Recordarme</span>
+        </label>
+        <a href="forgot-password.html" class="forgot-link">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <!-- SUBMIT -->
+      <button class="submit-btn" id="submitBtn" onclick="submitLogin()">
+        <span class="btn-text">Iniciar sesión</span>
+      </button>
+
+      <p class="terms">Al iniciar sesión aceptas nuestros <a href="#">Términos de uso</a> y <a href="#">Política de privacidad</a></p>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">✅</div>
+      <div class="success-title">¡Bienvenido de vuelta!</div>
+      <div class="success-sub">Iniciaste sesión correctamente.<br>Te redirigimos al dashboard...</div>
+      <div style="width:100%;height:3px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden">
+        <div id="progressBar" style="height:100%;background:linear-gradient(90deg,#6c63ff,#00d4aa);width:0%;transition:width 2s ease;border-radius:100px"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── VALIDATION ──
+function validateEmail(el){
+  const v=el.value;
+  const msg=document.getElementById('emailMsg');
+  if(!v){el.className='field-input';msg.textContent='';msg.className='field-msg';return false}
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  el.className='field-input '+(ok?'ok':'');
+  msg.textContent=ok?'✓ Email válido':'Ingresa un email válido';
+  msg.className='field-msg '+(ok?'ok':'');
+  return ok;
+}
+function validateEmailBlur(el){
+  if(el.value&&!validateEmail(el)){
+    el.className='field-input err';
+    const msg=document.getElementById('emailMsg');
+    msg.textContent='Ingresa un email válido';msg.className='field-msg err';
+  }
+}
+function validatePwd(el){
+  const v=el.value;
+  const msg=document.getElementById('pwdMsg');
+  if(!v){el.className='field-input';msg.textContent='';msg.className='field-msg';return false}
+  const ok=v.length>=6;
+  el.className='field-input '+(ok?'ok':'');
+  msg.textContent=ok?'✓ Contraseña válida':'Mínimo 6 caracteres';
+  msg.className='field-msg '+(ok?'ok':'');
+  return ok;
+}
+function togglePwd(id,btn){
+  const input=document.getElementById(id);
+  const isText=input.type==='text';
+  input.type=isText?'password':'text';
+  btn.textContent=isText?'👁️':'🙈';
+}
+
+// ── SUBMIT ──
+async function submitLogin(){
+  const email=document.getElementById('email').value.trim();
+  const pwd=document.getElementById('password').value;
+  const banner=document.getElementById('errBanner');
+  banner.classList.remove('show');
+
+  const emailOk=validateEmail(document.getElementById('email'));
+  const pwdOk=validatePwd(document.getElementById('password'));
+  if(!email||!emailOk){document.getElementById('email').className='field-input err';return}
+  if(!pwd||!pwdOk){document.getElementById('password').className='field-input err';return}
+
+  const btn=document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  btn.disabled=true;
+
+  try{
+    // En producción: llama a POST /api/auth/login
+    // const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pwd})});
+    // const d=await r.json();
+    // if(!r.ok)throw new Error(d.error||'Error al iniciar sesión');
+    // localStorage.setItem('nexus_token',d.token);
+    // localStorage.setItem('nexus_user',JSON.stringify(d.user));
+
+    // DEMO: simular login exitoso
+    await new Promise(r=>setTimeout(r,1400));
+
+    // Si las credenciales no son correctas (demo):
+    if(email==='error@test.com'){throw new Error('Credenciales incorrectas. Verifica tu email y contraseña.')}
+
+    showSuccess();
+  }catch(err){
+    btn.classList.remove('loading');btn.disabled=false;
+    banner.classList.add('show');
+    document.getElementById('errMsg').textContent=err.message||'Error al iniciar sesión. Inténtalo de nuevo.';
+    document.getElementById('password').value='';
+    document.getElementById('password').className='field-input err';
+  }
+}
+
+function handleGoogle(){
+  // En producción: window.location.href='/api/auth/google';
+  const btn=document.querySelector('.google-btn');
+  btn.style.opacity='.6';btn.style.pointerEvents='none';
+  btn.innerHTML='<span style="font-size:13px">Conectando con Google...</span>';
+  setTimeout(()=>showSuccess(),1600);
+}
+
+function showSuccess(){
+  document.getElementById('formState').style.display='none';
+  const s=document.getElementById('successState');
+  s.classList.add('show');
+  // Progress bar animation
+  setTimeout(()=>{document.getElementById('progressBar').style.width='100%'},50);
+  // Redirect after 2.2s
+  setTimeout(()=>window.location.href='dashboard.html',2300);
+}
+
+// ── CHECK REF CODE ──
+const urlParams=new URLSearchParams(window.location.search);
+const ref=urlParams.get('ref');
+if(ref)sessionStorage.setItem('nexus_ref',ref);
+
+// ── CHECK EXISTING SESSION ──
+const tok=localStorage.getItem('nexus_token');
+if(tok)window.location.href='dashboard.html';
+
+// THEME
+(function(){
+  const t=localStorage.getItem('kreaix_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  const b=document.getElementById('ttbtn');
+  if(b)b.textContent=t==='dark'?'🌙':'☀️';
+})();
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('kreaix_theme',next);
+  const b=document.getElementById('ttbtn');
+  if(b)b.textContent=next==='dark'?'🌙':'☀️';
+}
+</script>
+</body>
+</html>
